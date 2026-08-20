@@ -1,0 +1,5 @@
+{
+  "name": "metallic-materials-academic-editor",
+  "user": "ubuntu",
+  "install": "npm ci --no-audit --no-fund"
+}

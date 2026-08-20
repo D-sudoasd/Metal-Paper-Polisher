@@ -280,7 +280,6 @@ higher、lower、enhanced、reduced、superior、comparable 等词应明确：
 
 内容归属取决于结论离原始数据的距离：
 
-
 a. 图表或计算输出可以直接核查的事实与局部判断，优先进入 Results；
 
 b. 需要联合多幅图、多个尺度、模型、文献和替代解释才能成立的综合认识，进入 Discussion。
