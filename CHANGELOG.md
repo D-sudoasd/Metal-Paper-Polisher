@@ -1,14 +1,81 @@
 # Changelog
 
+## Unreleased — 摘要核心发现单链精修
+
+本次更新在现有“摘要功能模型”之上增加一个可显式选择的摘要精修模式，用于将原文已经建立的单一主发现重构为高度集中的科学推演链。该模式吸收的是高水平机制摘要的抽象逻辑层级，不复制任何范文的原句、具体机制或数据排列。
+
+### 新增能力
+
+1. **三种摘要精修模式**
+   - 自动；
+   - 标准功能型；
+   - 核心发现单链（Mo式逻辑）。
+
+2. **S1–S4 功能契约**
+   - S1：一句话建立研究价值；
+   - S2：说明已有认识的边界并切出精确缺口；
+   - S3：用一个主要谓语提出全文最高层级核心发现；
+   - S4：说明本文把该发现解析到什么机制深度，方法降为从属信息。
+
+3. **核心发现句提取**
+   - 优先选择“最上游且得到证据闭合的新增关系”；
+   - 禁止在核心句中堆入仪器、完整工艺、多个数值、组织清单、精确取向关系和多组 benchmark；
+   - 为 `precedes`、`enables`、`accelerates`、`induces`、`governs` 等核心动词设置证据门槛。
+
+4. **摘要后半段的增量控制**
+   - S3 之后每句话必须提供本文新增信息；
+   - 领域常识和正常基准只作为受控对比的从属成分；
+   - 使用“问题接力”检查相邻句是否形成必要的逻辑依赖；
+   - 一句话只闭合一个主要机制箭头。
+
+5. **性能类摘要专门处理**
+   - 区分“上游组织形成规律主导”和“综合性能主导”两条路线；
+   - 对强塑、强韧、低模量—高疲劳等性能组合分别解释 P1、P2；
+   - 在综合指标或性能权衡处重新汇合；
+   - 支持 fatigue strain 等原文已经定义的综合指标作为摘要主轴。
+
+6. **机制凝练与结尾闭合**
+   - 将多个显微观察压缩为“直接观察 → 上位机制 → 性能或过程后果”；
+   - 倒数第二句必须形成受证据支持的物理落点；
+   - 末句将认识提升一个层级并保留适用边界，删除空泛的 `provide a new strategy` 和 `provide new insight`。
+
+7. **专用输出和提示词**
+   - 一句话核心发现及证据等级；
+   - S1–Sn 句子功能映射；
+   - 每句回答的问题；
+   - 新信息审计；
+   - 未闭合机制环节和作者确认项；
+   - 新增可独立使用的专用提示词。
+
+### 新增文件
+
+- `references/ABSTRACT_CORE_CLAIM_MODE.md`
+- `references/PROMPT_ABSTRACT_CORE_CLAIM.md`
+
+### 更新文件
+
+- `README.md`
+- `references/ABSTRACT_MODELS.md`
+- `references/INPUT_TEMPLATE.md`
+- `references/PROMPT_COMPACT.md`
+- `references/QUALITY_CHECKLIST.md`
+
+### 科学安全边界
+
+- 核心发现单链只能从原文提取，不能从并列观察生成；
+- 原文存在独立第二主线、证据断裂或天然平行贡献时，自动退回标准功能型摘要；
+- 为提高摘要锋利度，不得提高因果强度、删除关键比较条件或补写缺失机制；
+- 所有核心动词继续服从 L0–L7 主张—证据等级。
+
 ## v5.0.0 — 真实顶刊体裁对齐与投稿全流程覆盖
 
-本版本依据金属材料领域真实顶刊的公开投稿要求（Nature 系、Science 系、Acta/Scripta Materialia 等的 Guide for Authors）升级技能，并把覆盖范围从"正文精修"扩展到"投稿全流程"。
+本版本依据金属材料领域真实顶刊的公开投稿要求（Nature 系、Science 系、Acta/Scripta Materialia 等的 Guide for Authors）升级技能，并把覆盖范围从“正文精修”扩展到“投稿全流程”。
 
 ### 新增能力
 
 1. **目标期刊适配**（`references/JOURNAL_ADAPTATION.md`）
    - 六个期刊家族路由：Nature 系、Science 系、Elsevier 全长文（Acta Mater. 基准）、快报（Scripta Mater. 基准）、长综述、通用学会期刊；
-   - 依据真实体裁参数执行适配：Nature Article ≤200 词引导段与 "Here we show" 句式；Nat. Commun. ≤150 词摘要与 5000 词正文；Science ≤125 词摘要与 ≤125 字符一句话总结；Acta Mater. ≤250 词事实型摘要、约 11,000 词/12 图软上限与 PSPP 链条；Scripta ≤2500 词、≤5 图；
+   - 依据真实体裁参数执行适配：Nature Article ≤200 词引导段与 `Here we show` 句式；Nat. Commun. ≤150 词摘要与 5000 词正文；Science ≤125 词摘要与 ≤125 字符一句话总结；Acta Mater. ≤250 词事实型摘要、约 11,000 词/12 图软上限与 PSPP 链条；Scripta ≤2500 词、≤5 图；
    - 同一摘要在不同家族间的功能位对比表与题目适配规则；
    - 安全边界：体裁适配只允许重排、压缩和调整受众层次，不改变科学内容。
 
@@ -21,23 +88,15 @@
 
 3. **高频语言问题与领域书写规范**（`references/LANGUAGE_PITFALLS.md`）
    - 图表引用句式、时态规范、冠词与单复数、评价词、动词搭配；
-   - 单位、晶体学记法（晶面/晶向/取向关系/相名称正斜体）、材料命名规范；
+   - 单位、晶体学记法、材料命名规范；
    - 悬垂修饰、指代唯一性、句式冗余压缩、连接词强度；
-   - 中译英高频陷阱对照表（组织/性能/细化/归因等）。
+   - 中译英高频陷阱对照表。
 
 4. **易用性**
-   - `SKILL.md` 新增"快速开始"：三种零配置用法（直接粘贴 / 粘贴 + 目标期刊 / 投稿材料请求）；
-   - 新增投稿包输出模式（材料本体 + 主张定位 + 字符/词数核对 + 降级清单）；
+   - `SKILL.md` 新增快速开始；
+   - 新增投稿包输出模式；
    - 内部执行顺序增加期刊适配与投稿材料核对步骤；
    - 质量核查表新增期刊适配与投稿材料检查项。
-
-### 更新文件
-
-- `SKILL.md`（v5.0.0：第六层"期刊体裁层"、第 14 节期刊体裁与投稿材料、快速开始、章节重编号）
-- `README.md`（全面重写）
-- `references/QUALITY_CHECKLIST.md`
-- `references/PROMPT_FULL.md`、`references/PROMPT_COMPACT.md`、`references/INPUT_TEMPLATE.md`
-- 其余参考文件版本号对齐 v5
 
 ### 保留的核心原则
 
@@ -52,38 +111,26 @@
 
 - 技能元数据由 `materials-fracture-academic-polisher` 更名为 `metallic-materials-academic-editor`。
 - 文档标题由“材料与断裂力学论文精修”调整为“金属材料学论文精修与科学论证”。
-- GitHub 仓库旧地址暂时保留，避免既有链接失效。
+- GitHub 仓库保留兼容跳转。
 
 ### 新增的核心层
 
 1. **Results–Discussion 第一性原理分工**
    - 以“结论离原始数据的距离”为归属标准；
    - Results 建立直接证据、定量关系和局部判断；
-   - Discussion 联合多组证据建立完整机制、处理替代解释和适用边界；
-   - 因果关系可在 Results 中以局部形式建立，前提是实验设计和数据直接支持。
+   - Discussion 联合多组证据建立完整机制、处理替代解释和适用边界。
 
 2. **性能类论文专用叙事**
    - 应用需求 → 性能瓶颈/权衡 → 中间物理过程 → 设计动作；
    - 设计动作 → 组织状态 → 变形/损伤过程 → 定量性能；
-   - 分别解释各项性能来源及通常代价为何受到抑制；
-   - 增加性能记录、强塑/强韧/模量–疲劳协同和文献可比性规则。
+   - 分别解释各项性能来源及通常代价为何受到抑制。
 
 3. **主张—证据矩阵**
    - 增加 L0–L7 证据等级；
-   - 细化直接观察、差异、关联、贡献、机制因果、控制机制和推广性主张；
-   - 为 significant、superior、record、highest 等评价词设置最低证据要求。
+   - 细化直接观察、差异、关联、贡献、机制因果、控制机制和推广性主张。
 
 4. **十类论文路由**
-   - M：组织演化与相变；
-   - P：性能设计；
-   - D：变形与载荷分配；
-   - F：疲劳断裂；
-   - E：氢脆与环境损伤；
-   - T：蠕变与高温；
-   - A：加工制造；
-   - Q：表征方法；
-   - C：计算模型；
-   - R：综述观点。
+   - M：组织演化与相变；P：性能设计；D：变形与载荷分配；F：疲劳断裂；E：氢脆与环境损伤；T：蠕变与高温；A：加工制造；Q：表征方法；C：计算模型；R：综述观点。
 
 5. **领域证据安全门**
    - 同步辐射晶格应变、峰宽和峰强；
@@ -98,27 +145,6 @@
    - 每幅主图承担一个主要证明任务；
    - 图序能够复述论文的证明顺序。
 
-### 新增文件
-
-- `references/RESULTS_DISCUSSION_LOGIC.md`
-- `references/PERFORMANCE_PAPER_LOGIC.md`
-- `references/CLAIM_EVIDENCE_MATRIX.md`
-- `references/DOMAIN_EVIDENCE_MODULES.md`
-- `references/ABSTRACT_MODELS.md`
-- `references/WORKED_BLUEPRINTS.md`
-
-### 更新文件
-
-- `SKILL.md`
-- `README.md`
-- `references/PAPER_TYPE_ROUTING.md`
-- `references/ARCHITECTURE_RULES.md`
-- `references/CORPUS_STYLE_NOTES.md`
-- `references/PROMPT_FULL.md`
-- `references/PROMPT_COMPACT.md`
-- `references/INPUT_TEMPLATE.md`
-- `references/QUALITY_CHECKLIST.md`
-
 ### 保留的 v3 原则
 
 - 因果链只能提取，不能生成；
@@ -128,4 +154,4 @@
 
 ## v3.0
 
-增加全文主线、过程轨迹、阶段继承、理论—观察配对和论文类型初步路由。详见 `CHANGELOG_FROM_V2.md`。
+增加全文主线、过程轨迹、理论—观察配对和论文类型初步路由。详见 `CHANGELOG_FROM_V2.md`。
