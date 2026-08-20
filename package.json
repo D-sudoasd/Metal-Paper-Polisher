@@ -1,6 +1,6 @@
 {
   "name": "metallic-materials-academic-editor",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "description": "Tooling to lint and validate the metallic-materials academic editing skill package.",
   "type": "module",

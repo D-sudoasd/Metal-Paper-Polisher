@@ -2,17 +2,17 @@
 
 # Metallic Materials Academic Editor
 
-**金属材料学论文精修与科学论证技能 · 让每一个结论都站在证据上**
+<strong>金属材料学论文精修与科学论证技能 · 让每一个结论都站在证据上</strong>
 
-*A scientifically constrained AI editing skill for metallic-materials manuscripts — from sentence polish to full-paper argumentation, journal-format adaptation, and submission packages.*
+<em>A scientifically constrained AI editing skill for metallic-materials manuscripts — from sentence polish to full-paper argumentation, journal-format adaptation, and submission packages.</em>
 
 [![Version](https://img.shields.io/badge/version-5.0.0-blue)](CHANGELOG.md)
 [![Skill Format](https://img.shields.io/badge/format-Agent%20Skill-8A2BE2)](SKILL.md)
-[![Language](https://img.shields.io/badge/docs-%E4%B8%AD%E6%96%87%20%2F%20English%20output-brightgreen)](#)
-[![Domain](https://img.shields.io/badge/domain-Physical%20Metallurgy%20%C2%B7%20Mechanics%20of%20Materials-orange)](#)
+![Language](https://img.shields.io/badge/docs-%E4%B8%AD%E6%96%87%20%2F%20English%20output-brightgreen)
+![Domain](https://img.shields.io/badge/domain-Physical%20Metallurgy%20%C2%B7%20Mechanics%20of%20Materials-orange)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-teal)](#参与共建)
 
-[快速开始](#快速开始) · [核心能力](#核心能力) · [期刊覆盖](#按真实顶刊体裁适配) · [工作原理](#工作原理) · [文件地图](#文件地图)
+[快速开始](#快速开始) · [核心能力](#核心能力) · [期刊覆盖](#6-按真实顶刊体裁适配v5-新增) · [工作原理](#工作原理) · [文件地图](#文件地图)
 
 </div>
 
