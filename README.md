@@ -4,7 +4,7 @@
 
 <strong>金属材料学论文精修与科学论证技能 · 让每一个结论都站在证据上</strong>
 
-<em>A scientifically constrained AI editing skill for metallic-materials manuscripts — from sentence polish to full-paper argumentation, discovery/design abstract reconstruction, journal-format adaptation, and submission packages.</em>
+<em>A scientifically constrained AI editing skill for metallic-materials manuscripts — from sentence polish to full-paper argumentation, discovery/design abstract reconstruction, Introduction logic reconstruction, journal-format adaptation, and submission packages.</em>
 
 [![Version](https://img.shields.io/badge/version-5.0.0-blue)](CHANGELOG.md)
 [![Skill Format](https://img.shields.io/badge/format-Agent%20Skill-8A2BE2)](SKILL.md)
@@ -12,7 +12,7 @@
 ![Domain](https://img.shields.io/badge/domain-Physical%20Metallurgy%20%C2%B7%20Mechanics%20of%20Materials-orange)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-teal)](#参与共建)
 
-[快速开始](#快速开始) · [核心能力](#核心能力) · [摘要双路由](#6-摘要发现设计双路由精修) · [期刊覆盖](#7-按真实顶刊体裁适配) · [工作原理](#工作原理) · [文件地图](#文件地图)
+[快速开始](#快速开始) · [核心能力](#核心能力) · [摘要双路由](#6-摘要发现设计双路由精修) · [Introduction 专用](#7-introduction-专用双路由重构) · [期刊覆盖](#8-按真实顶刊体裁适配) · [工作原理](#工作原理) · [文件地图](#文件地图)
 
 </div>
 
@@ -22,9 +22,9 @@
 
 一个面向**金属材料学**（物理冶金、相变析出、变形机制、疲劳断裂、氢脆环境损伤、高温蠕变、增材制造、表征方法、计算材料学）的学术编辑技能。可加载到 Claude、Cursor 等支持 Agent Skill 的工具中，也可直接使用仓库内提示词。
 
-它与通用“论文润色 prompt”的根本区别：**先审证据，再动语言；先判断贡献属于发现还是设计，再组织摘要。**
+它与通用“论文润色 prompt”的根本区别：**先审证据，再动语言；先判断贡献属于发现还是设计，再组织摘要和 Introduction。**
 
-> 通用润色器为了流畅会把 *A was accompanied by B* 写成 *A led to B*。语言变得顺滑，科学结论却被静默加强。本技能内置 L0–L7 主张—证据分级、领域安全门、论文类型路由、摘要发现/设计双路由和逐句增量检查，保证润色后的因果动词与原文证据相匹配。
+> 通用润色器为了流畅会把 *A was accompanied by B* 写成 *A led to B*。语言变得顺滑，科学结论却被静默加强。本技能内置 L0–L7 主张—证据分级、领域安全门、论文类型路由、摘要发现/设计双路由、Introduction 精确缺口路由和逐句增量检查，保证润色后的因果动词与原文证据相匹配。
 
 ## 为什么需要它
 
@@ -38,6 +38,7 @@
 | “The story is hard to follow.” | 图按 TEM/XRD/DFT 工具堆叠，不按科学问题排列 | 全文主线与图序诊断 |
 | “The main finding is buried in the abstract.” | 核心句被方法、数值和组织清单淹没 | 发现导向单链 |
 | “The abstract reports properties but not a design principle.” | 工艺—组织—性能罗列，缺少中间变量和代价抑制 | 设计/解决导向链 |
+| “The Introduction is broad but the gap is vague.” | 背景和文献很多，缺口与本文贡献不在同一层级 | Introduction 专用双路由重构 |
 | “Not suitable for this journal.” | Elsevier 式技术摘要投给 Nature 系 | 目标期刊适配 |
 
 ## 核心能力
@@ -146,7 +147,76 @@ L6 控制主导   controlled / governed / dominated
 
 存在无法汇合的第二主线、证据断裂或天然平行贡献时，退回标准功能型，不强行生成单链。
 
-### 7. 按真实顶刊体裁适配
+### 7. Introduction 专用双路由重构
+
+Introduction 专用模块从全文最高层贡献反向生成必要性论证。它要求在写段落前先确定八项工作变量：
+
+```text
+Y：最终解释、调节或实现的结果
+A：当前最接近的共识或设计策略
+C：现有认识失效的具体条件
+B：精确缺失的关系、定量贡献或实现环节
+X：本文发现或操控的关键变量、状态或路径
+M：连接 X 与 Y 的中间过程
+E：证明各箭头的证据路线
+G：新增解释、预测、调控或实施能力
+```
+
+引言前半段从 `Y` 反向收缩到 `B`，末段再从 `X` 沿 `M、E、G` 正向展开：
+
+```text
+重要结果 Y
+→ 当前共识 A
+→ A 在条件 C 下的边界
+→ 精确缺口 B
+→ X → M → Y
+→ 证据路线 E
+→ 解释或设计能力 G
+```
+
+#### 发现导向 Introduction
+
+适用于异常现象、隐藏前驱状态、相变或损伤路径、定量机制关系：
+
+```text
+重要现象或过程
+→ 正常预期、已知初态/终态或当前解释
+→ 在 C 下出现知识断点
+→ 精确机制问题 B
+→ 本文发现 X
+→ X 通过 M 解释 Y
+→ 证据与认识边界
+```
+
+#### 需求与性能导向 Introduction
+
+适用于多性能协同、精确调控、制造实施和工业约束：
+
+```text
+目标能力 Y
+→ 已知设计原理 A
+→ A 在约束 C 下的实现或定量瓶颈 B
+→ 可控变量 X
+→ 关键中间状态 M
+→ 组织、物性或性能 Y
+→ 实施范围 G
+```
+
+模块优先识别四类精确缺口：
+
+1. 正常预期与观测结果冲突；
+2. 初态和终态之间的机制路径缺失；
+3. 多因素贡献、符号、敏感性或耦合关系未定量；
+4. 已知原理在明确工程约束下缺少可实施路径。
+
+核心安全要求：缺口与最高层贡献处于同一逻辑层级；文献按重要性、当前共识、最近前沿和精确缺口组织；方法必须对应缺失的可观测量；引言末段与首图和正文证据顺序一致；引文重排不能扩大支撑范围。
+
+完整规则与提示词：
+
+- [`references/INTRODUCTION_LOGIC.md`](references/INTRODUCTION_LOGIC.md)
+- [`references/PROMPT_INTRODUCTION_RECONSTRUCTION.md`](references/PROMPT_INTRODUCTION_RECONSTRUCTION.md)
+
+### 8. 按真实顶刊体裁适配
 
 依据期刊公开 Guide for Authors 整理成可执行规则：
 
@@ -160,7 +230,7 @@ L6 控制主导   controlled / governed / dominated
 
 体裁适配只重排、压缩和调整受众层次，科学内容一个字不加。
 
-### 8. 投稿全流程材料
+### 9. 投稿全流程材料
 
 - **Highlights**：3–5 条、每条 ≤85 字符；
 - **Cover Letter**：250–450 词，写认识或能力增量；
@@ -169,7 +239,7 @@ L6 控制主导   controlled / governed / dominated
 
 所有投稿材料与正文共享同一主张集合：正文写 `suggests`，Highlights 不写 `demonstrates`。
 
-### 9. 领域书写规范
+### 10. 领域书写规范
 
 非母语作者高频问题的系统清单：图表引用句式、时态、相名称冠词、单位与晶体学记法、中译英陷阱、悬垂修饰、指代和评价词强度。
 
@@ -179,7 +249,7 @@ L6 控制主导   controlled / governed / dominated
 
 将本仓库放入技能目录，技能会按任务自动加载对应参考文件。
 
-五种零配置用法：
+六种零配置用法：
 
 ```text
 ① 直接粘贴论文文本
@@ -187,6 +257,7 @@ L6 控制主导   controlled / governed / dominated
 ③ “基于这篇摘要写 Highlights”
 ④ “按发现导向单链重构这个摘要”
 ⑤ “按设计/解决导向重构这个性能摘要”
+⑥ “围绕主要贡献和 new insight 重构这个 Introduction”
 ```
 
 ### 方式二：直接使用提示词
@@ -194,7 +265,37 @@ L6 控制主导   controlled / governed / dominated
 - [`references/PROMPT_FULL.md`](references/PROMPT_FULL.md)：通用完整版；
 - [`references/PROMPT_COMPACT.md`](references/PROMPT_COMPACT.md)：日常精简版；
 - [`references/PROMPT_ABSTRACT_CORE_CLAIM.md`](references/PROMPT_ABSTRACT_CORE_CLAIM.md)：发现导向单链；
-- [`references/PROMPT_ABSTRACT_DESIGN_SOLUTION.md`](references/PROMPT_ABSTRACT_DESIGN_SOLUTION.md)：设计/解决导向。
+- [`references/PROMPT_ABSTRACT_DESIGN_SOLUTION.md`](references/PROMPT_ABSTRACT_DESIGN_SOLUTION.md)：设计/解决导向；
+- [`references/PROMPT_INTRODUCTION_RECONSTRUCTION.md`](references/PROMPT_INTRODUCTION_RECONSTRUCTION.md)：Introduction 专用重构。
+
+### 进阶：Introduction 重构
+
+```text
+目标语言：英文
+文本所属部分：引言
+任务类型：Introduction 重构
+Introduction 模式：自动
+目标期刊：Acta Materialia
+润色强度：深度
+输出模式：Introduction 完整模式
+允许跨段重排：是
+
+作者认定的一句话主要贡献：
+Y：
+A：
+C：
+B：
+X：
+M：
+E1–E3：
+G：
+
+Introduction 草稿：
+[粘贴文本]
+
+可选的题目、摘要、Results、Discussion 和 Conclusion：
+[粘贴文本]
+```
 
 ### 进阶：设计导向摘要
 
@@ -231,8 +332,8 @@ P2 或通常代价被抑制的原因：
 ```mermaid
 flowchart TD
     A["1 科学完整性层<br/>数据 · 条件 · 术语 · 引文范围 · 结论边界锁定"] --> B["2 主张—证据层<br/>L0–L7 分级 · 动词强度匹配证据"]
-    B --> C["3 论文部分功能层<br/>摘要 / 引言 / Results / Discussion / 结论各司其职"]
-    C --> D["4 科学叙事层<br/>十类论文路由 · 摘要发现/设计双路由 · 全文主线 · 图序"]
+    B --> C["3 论文部分功能层<br/>摘要 / Introduction / Results / Discussion / 结论各司其职"]
+    C --> D["4 科学叙事层<br/>十类论文路由 · 摘要发现/设计双路由 · Introduction 双路由 · 全文主线 · 图序"]
     D --> E["5 领域证据安全门<br/>同步辐射 · 氢脆 · 疲劳 · 相变 · 计算"]
     E --> F["6 期刊体裁层<br/>家族适配 · 长度受众 · 投稿材料"]
     style A fill:#b71c1c,color:#fff
@@ -245,9 +346,11 @@ flowchart TD
 
 完整模式通常输出：精修稿 → 关键修改说明 → 需作者确认的问题 → 科学叙事诊断 → Results–Discussion 诊断。
 
-发现导向追加：核心发现、S1–Sn 功能映射、新信息审计、核心动词边界。
+发现导向摘要追加：核心发现、S1–Sn 功能映射、新信息审计、核心动词边界。
 
-设计导向追加：核心解决方案、设计类型、解决链、解释链、benchmark 审计和发现导向备选诊断。
+设计导向摘要追加：核心解决方案、设计类型、解决链、解释链、benchmark 审计和发现导向备选诊断。
+
+Introduction 完整模式追加：一句话核心新认识、`Y/A/C/B/X/M/E/G`、主路由、精确缺口类型、段落功能映射、缺口—贡献同级检查和引文证据审计。
 
 ## 与通用润色的对比
 
@@ -256,6 +359,7 @@ flowchart TD
 | 因果动词 | 为流畅随意升级 | 按 L0–L7 分级 |
 | 缺失环节 | 靠常识补写 | 列入作者确认项 |
 | 摘要中心 | 数据、方法和结果的压缩清单 | 发现单链或设计双闭环 |
+| Introduction | 背景扩写 + `remains unclear` | 从最高层贡献反推精确缺口和证据路线 |
 | 性能摘要 | 工艺—组织—性能罗列 | 解决链 + 解释链 |
 | Results/Discussion | 不区分 | 按证据距离逐句归属 |
 | 领域推断 | 峰宽=位错密度、断口=机制 | 专门安全门拦截 |
@@ -271,6 +375,8 @@ flowchart TD
 └── references/
     ├── PAPER_TYPE_ROUTING.md
     ├── ARCHITECTURE_RULES.md
+    ├── INTRODUCTION_LOGIC.md
+    ├── PROMPT_INTRODUCTION_RECONSTRUCTION.md
     ├── RESULTS_DISCUSSION_LOGIC.md
     ├── PERFORMANCE_PAPER_LOGIC.md
     ├── CLAIM_EVIDENCE_MATRIX.md
@@ -298,6 +404,8 @@ flowchart TD
 - 不把断口、峰宽、同步共现直接指定为唯一机制；
 - 不为获得锋利摘要把并列观察强行生成发现链；
 - 不为获得设计故事把普通制样工艺包装成解决方案；
+- 不为增强 Introduction 必要性夸大整个领域的知识缺口；
+- 不移动引文后扩大其实际支撑命题；
 - 不把单一材料或单一条件外推为普适设计准则；
 - 不复制任何范文的可识别词句、机制、工艺或数据排列；
 - 不替作者完成需要新增实验、计算或统计的科学判定。
@@ -306,7 +414,7 @@ flowchart TD
 
 | 版本 | 定位 |
 |---|---|
-| Unreleased | 摘要发现/设计双路由：发现单链 + 设计解决链 |
+| Unreleased | 摘要发现/设计双路由 + Introduction 发现/需求双路由重构 |
 | v5.0.0 | 真实顶刊体裁对齐 + 投稿全流程材料 + 领域书写规范 |
 | v4.0.0 | 金属材料学通用化：十类路由、证据矩阵、Results–Discussion 分工 |
 | v3.0 | 全文主线、过程轨迹、理论—观察配对 |
@@ -320,7 +428,7 @@ flowchart TD
 
 - **新领域模块**：钛合金氢化物、高熵合金短程序、镁合金孪生等证据边界；
 - **期刊适配档案**：更多期刊体裁参数；
-- **失败案例**：发现句过载、设计链断裂、性能比较失真和因果升级反例。
+- **失败案例**：发现句过载、设计链断裂、Introduction 缺口过宽、性能比较失真和因果升级反例。
 
 > 期刊格式数值以各期刊官网当期 Guide for Authors 为准；仓库整理值只作编辑起点。
 
