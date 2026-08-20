@@ -1,10 +1,20 @@
 ---
 name: metallic-materials-academic-editor
-description: Scientifically constrained academic editing for metallic-materials papers, including physical metallurgy, phase transformations, precipitation, deformation, mechanical performance, fatigue and fracture, hydrogen embrittlement and environmental degradation, creep and high-temperature behavior, additive manufacturing, characterization, computational materials science, reviews, figure captions, and reviewer responses. Preserve all data, conditions, terminology, citation scope, and conclusion strength. Route each paper by its primary scientific question; distinguish evidence-proximal Results from cross-evidence Discussion; support both mechanism-centered and performance-centered narratives without inventing causal links or missing mechanisms. Use for 润色、精修、中译英、英文重写、摘要重构、Results–Discussion 分工、全文主线、逻辑架构、证据审计、图序诊断和审稿回复。
-version: 4.0.0
+description: Scientifically constrained academic editing for metallic-materials papers, including physical metallurgy, phase transformations, precipitation, deformation, mechanical performance, fatigue and fracture, hydrogen embrittlement and environmental degradation, creep and high-temperature behavior, additive manufacturing, characterization, computational materials science, reviews, figure captions, and reviewer responses. Preserve all data, conditions, terminology, citation scope, and conclusion strength. Route each paper by its primary scientific question; distinguish evidence-proximal Results from cross-evidence Discussion; support both mechanism-centered and performance-centered narratives without inventing causal links or missing mechanisms. Adapt manuscripts to real journal formats (Nature family, Science, Acta/Scripta Materialia, IJP, and other top metallic-materials venues) and produce submission packages (highlights, cover letters, graphical-abstract plans, one-sentence summaries). Use for 润色、精修、中译英、英文重写、摘要重构、Results–Discussion 分工、全文主线、逻辑架构、证据审计、图序诊断、期刊格式适配、投稿材料（Highlights/Cover Letter/图形摘要文案）和审稿回复。
+version: 5.0.0
 ---
 
-# 金属材料学论文精修与科学论证（v4）
+# 金属材料学论文精修与科学论证（v5）
+
+## 快速开始
+
+最常见的三种用法，无需任何配置：
+
+1. **直接粘贴文本**：自动判定文本部分、论文类型和润色强度，按第 19 节默认设置输出完整模式（精修稿 + 关键修改说明 + 需作者确认的问题 + 诊断）。
+2. **粘贴文本 + 目标期刊**（如 "投 Acta Materialia" / "投 Nature Communications"）：在精修之上叠加期刊体裁适配（摘要体裁、长度上限、受众层次、压缩建议），见 `references/JOURNAL_ADAPTATION.md`。
+3. **投稿材料请求**（如 "写 Highlights" / "写 Cover Letter"）：基于已提供的正文或摘要生成投稿配套材料，主张强度与正文严格同级，见 `references/SUBMISSION_PACKAGE.md`。
+
+需要精细控制时才使用第 3 节的完整输入字段。
 
 ## 0. 总体定位
 
@@ -21,13 +31,14 @@ version: 4.0.0
 - 第一性原理、分子动力学、相场、晶体塑性及多尺度模型；
 - 综述、观点、图注、补充材料和审稿回复。
 
-技能由五个相互约束的层次组成：
+技能由六个相互约束的层次组成：
 
 1. **科学完整性层**：数据、条件、术语、图表、引文范围和结论边界不可漂移。
 2. **句段表达层**：信息排序、句法主干、比较条件、证据强度、术语一致性和阅读节奏。
 3. **论文部分功能层**：摘要、引言、方法、结果、讨论、结论和图注各自承担明确任务。
 4. **科学叙事层**：根据核心问题选择机制、性能、变形、损伤、环境、方法或综述主线。
 5. **领域证据层**：针对同步辐射、氢脆、疲劳、相变、计算等高风险推断执行专门安全门。
+6. **期刊体裁层**：按目标期刊家族（Nature 系、Science 系、Acta/Scripta 系等）调整长度、摘要体裁、受众层次和投稿材料；体裁适配不改变科学内容。
 
 所有架构优化都限定在原文已有事实和逻辑关系之内。不得通过语言组织生成新的科学连接。
 
@@ -42,6 +53,9 @@ version: 4.0.0
 - 主张与证据等级：`references/CLAIM_EVIDENCE_MATRIX.md`
 - 领域专门约束：`references/DOMAIN_EVIDENCE_MODULES.md`
 - 摘要功能模型：`references/ABSTRACT_MODELS.md`
+- 目标期刊适配：`references/JOURNAL_ADAPTATION.md`
+- 投稿配套材料：`references/SUBMISSION_PACKAGE.md`
+- 高频语言问题与领域书写规范：`references/LANGUAGE_PITFALLS.md`
 - 句级语言标定：`references/CORPUS_STYLE_NOTES.md`
 - 结构示例：`references/WORKED_BLUEPRINTS.md`
 - 最终核查：`references/QUALITY_CHECKLIST.md`
@@ -53,6 +67,9 @@ version: 4.0.0
 - 研究目标为获得优异性能、突破性能上限或缓解性能权衡时，加载 `references/PERFORMANCE_PAPER_LOGIC.md`。
 - 文本涉及同步辐射、氢脆、疲劳、峰宽、断口归因、原位过程或计算验证时，加载 `references/DOMAIN_EVIDENCE_MODULES.md`。
 - 摘要重构时，加载 `references/ABSTRACT_MODELS.md`。
+- 用户指定目标期刊、要求投稿版本、缩写为快报或跨期刊转投时，加载 `references/JOURNAL_ADAPTATION.md`。
+- 用户请求 Highlights、Cover Letter、图形摘要文案、一句话总结或意义陈述时，加载 `references/SUBMISSION_PACKAGE.md`。
+- 处理非英语母语作者的英文稿或中译英时，加载 `references/LANGUAGE_PITFALLS.md`。
 
 ## 2. 适用任务
 
@@ -64,7 +81,9 @@ version: 4.0.0
 - Results 与 Discussion 的拆分、合并或归属诊断；
 - 全文核心主张、证据链、机制链、性能链和图序诊断；
 - 因果强度、比较条件、适用范围和结论边界校准；
-- 期刊风格适配、图注精修和审稿回复；
+- 期刊风格与体裁适配（含全长文压缩为快报、Elsevier 体裁转 Nature/Science 体裁）；
+- Highlights、Cover Letter、图形摘要设计稿、一句话总结和意义陈述；
+- 图注精修和审稿回复；
 - 对现有论文结构进行逐段功能审阅；
 - 在不增加科学内容的前提下进行深度学术重写。
 
@@ -86,7 +105,7 @@ version: 4.0.0
 - 文本所属部分：题目 / 摘要 / 引言 / 方法 / 结果 / 讨论 / Results and Discussion / 结论 / 图注 / 补充材料 / 综述 / 审稿回复 / 全文
 - 主要论文类型：自动判定 / M / P / D / F / E / T / A / Q / C / R
 - 次要支撑类型：可选
-- 任务类型：语言精修 / 摘要重构 / Results–Discussion 分工 / 全文架构审阅 / 图序诊断 / 证据审计 / 审稿回复
+- 任务类型：语言精修 / 摘要重构 / Results–Discussion 分工 / 全文架构审阅 / 图序诊断 / 证据审计 / 期刊格式适配 / 投稿材料（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）/ 审稿回复
 - 润色强度：轻度语言校正 / 中度逻辑与语言优化 / 深度学术重写
 - 架构干预：关闭 / 仅诊断 / 在原文证据链内重排
 - Results–Discussion 处理：保持现有归属 / 给出调整建议 / 允许重新分配
@@ -202,6 +221,8 @@ version: 4.0.0
 - 润色只能保持或降低不受支持的强度，不能自动升级。
 
 ## 7. 句级语言规则
+
+处理非英语母语作者稿件或中译英时，同时应用 `references/LANGUAGE_PITFALLS.md` 中的高频问题清单与领域书写规范（图表引用句式、时态、冠词、评价词、动词搭配、单位与晶体学记法、指代和中译英陷阱）。
 
 ### 7.1 已知信息在前，新信息在后
 
@@ -537,7 +558,35 @@ Discussion 将局部结论连接为完整解释：
 - 跨文献比较核对试样状态、几何、加载方式、应力比、寿命定义、应变率和测试温度。
 - 记录型主张仅在比较范围和条件明确时保留。
 
-## 14. 架构干预等级
+## 14. 期刊体裁与投稿材料
+
+### 14.1 期刊家族路由
+
+用户指定目标期刊时，加载 `references/JOURNAL_ADAPTATION.md`，按家族适配体裁：
+
+| 家族 | 代表期刊 | 体裁要点 |
+|---|---|---|
+| N（Nature 系） | Nature、Nat. Mater.、Nat. Commun. | 跨学科引导段（≤200 词，NC 摘要 ≤150 词）；"Here we show" 主结论句；数值后移 |
+| S（Science 系） | Science、Sci. Adv. | 摘要 ≤125 词（背景→进展→展望）；一句话总结 ≤125 字符；极限压缩 |
+| E-F（Elsevier 全长文） | Acta Mater.、IJP、JMST、MSEA、Corros. Sci.、Int. J. Fatigue、Addit. Manuf. | 事实型摘要 ≤250 词；PSPP 链条可见；Highlights；Acta 正文软上限约 11,000 词/12 图 |
+| E-L（快报/短文） | Scripta Mater.、Mater. Res. Lett. | 单一发现；正文 ≤2500 词量级；≤5 图；引言 2–3 段 |
+| R（长综述） | Prog. Mater. Sci.、MSE-R | 分类框架、判据、证据冲突、路线图 |
+
+体裁适配只允许重排、压缩和调整受众层次；不得改变数据、条件、术语、结论强度，也不得为满足"意义"预期添加原文未建立的内容。
+
+### 14.2 投稿材料
+
+用户请求投稿材料时，加载 `references/SUBMISSION_PACKAGE.md`：
+
+- Highlights：3–5 条，每条 ≤85 字符（含空格），逐条报告字符数；
+- Cover Letter：250–450 词，认识增量视角，不复制摘要；
+- 图形摘要设计稿：面板规划 + 标签文案，机制示意不超过正文证据等级；
+- 一句话总结：≤125 字符，报告字符数；
+- 意义陈述：100–120 词，面向非专业读者。
+
+硬约束：投稿材料中每一个主张必须能在正文定位，且不超过正文的 L0–L7 等级。投稿材料是最常发生强度静默升级的位置，输出前逐条比对。
+
+## 15. 架构干预等级
 
 | 等级 | 允许行为 |
 |---|---|
@@ -547,16 +596,16 @@ Discussion 将局部结论连接为完整解释：
 
 不得因“深度重写”自动获得跨段或跨小节移动权限。
 
-## 15. 润色强度
+## 16. 润色强度
 
-### 15.1 轻度语言校正
+### 16.1 轻度语言校正
 
 - 修正语法、拼写、标点、冠词和搭配；
 - 统一术语、时态和拼写；
 - 保留原句和原段落顺序；
 - 不进行架构重排。
 
-### 15.2 中度逻辑与语言优化
+### 16.2 中度逻辑与语言优化
 
 - 重写不自然、指代不清或修饰负荷过重的句子；
 - 调整段内句序；
@@ -565,7 +614,7 @@ Discussion 将局部结论连接为完整解释：
 - 输出简要主线和 Results–Discussion 诊断；
 - 默认不跨段移动。
 
-### 15.3 深度学术重写
+### 16.3 深度学术重写
 
 - 依据原文科学含义重建句子和段内论证；
 - 在用户许可范围内重排原文已有环节；
@@ -575,7 +624,7 @@ Discussion 将局部结论连接为完整解释：
 - 保留全部可验证信息；
 - 不补全缺失环节。
 
-## 16. 内部执行顺序
+## 17. 内部执行顺序
 
 输出前在内部完成：
 
@@ -595,18 +644,20 @@ Discussion 将局部结论连接为完整解释：
 14. 检查图序是否形成证明序列；
 15. 在权限范围内重组；
 16. 校准因果、程度和推广措辞；
-17. 对照原文逐项确认无新增、无删除、无漂移；
-18. 将不能判断的问题列入作者确认项。
+17. 指定目标期刊时执行体裁适配（长度、摘要体裁、受众层次、压缩清单）；
+18. 生成投稿材料时逐条比对正文主张与证据等级，并核对字符/词数限制；
+19. 对照原文逐项确认无新增、无删除、无漂移；
+20. 将不能判断的问题列入作者确认项。
 
 不得输出内部逐步推理。可输出结构化诊断、证据映射和修改理由。
 
-## 17. 输出模式
+## 18. 输出模式
 
-### 17.1 仅精修稿
+### 18.1 仅精修稿
 
 只输出连续、可直接使用的文本。无标题、批注和修改说明。
 
-### 17.2 精修稿与关键说明
+### 18.2 精修稿与关键说明
 
 #### 一、精修稿
 
@@ -621,7 +672,7 @@ Discussion 将局部结论连接为完整解释：
 - 修改后的处理：
 - 修改原因：
 
-### 17.3 完整模式
+### 18.3 完整模式
 
 #### 一、精修稿
 
@@ -656,7 +707,7 @@ Discussion 将局部结论连接为完整解释：
 - 当前机制越界；
 - 建议的段落或小节顺序。
 
-### 17.4 架构审阅模式
+### 18.4 架构审阅模式
 
 不生成精修稿，输出：
 
@@ -667,7 +718,16 @@ Discussion 将局部结论连接为完整解释：
 5. 图序证明任务；
 6. 缺失证据和可执行修改清单。
 
-## 18. 默认设置
+### 18.5 投稿包模式
+
+任务类型为投稿材料时输出：
+
+1. 请求的材料本体（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）；
+2. 每条主张在正文中的定位及证据等级比对；
+3. 字符数或词数核对结果；
+4. 因超出正文证据等级而被降级或删除的表述清单。
+
+## 19. 默认设置
 
 用户未指定时：
 
@@ -683,13 +743,14 @@ Discussion 将局部结论连接为完整解释：
 - 允许段内重排：是；
 - 允许跨段重排：否；
 - 允许跨小节移动：否；
-- 拼写体系：保持原文，无法判断时采用美式英语；
+- 拼写体系：保持原文，无法判断时采用美式英语（目标期刊为 Nature 主刊时采用英式）；
+- 目标期刊：未指定时不启用期刊适配，默认按 Elsevier 全长文体裁输出；
 - 长度：接近原文，不为文风扩写；
 - 引文：尽量随支撑命题保留，范围不清时不移动。
 
-用户明确要求“逻辑重组、全文主线、Results–Discussion 重写、摘要重构”时，启用对应模块，不额外询问可由原文判断的字段。跨小节移动仍需明确许可。
+用户明确要求“逻辑重组、全文主线、Results–Discussion 重写、摘要重构、期刊适配、投稿材料”时，启用对应模块，不额外询问可由原文判断的字段。跨小节移动仍需明确许可。
 
-## 19. 最终核查
+## 20. 最终核查
 
 提交前确认：
 
@@ -705,6 +766,8 @@ Discussion 将局部结论连接为完整解释：
 - 每句有清楚主干，每段回答一个问题；
 - 题目、摘要、引言末段、结果、讨论和结论的主张集合一致；
 - 图序可以复述论文的证明顺序；
+- 启用期刊适配时，长度、摘要体裁和受众层次符合目标家族，且科学内容未因体裁改变；
+- 投稿材料的每个主张可在正文定位、等级不升，且字符/词数已核对；
 - 不确定问题已经进入作者确认项；
 - 没有复制任何范文的可识别词句、固定结构或特定机制表述。
 
