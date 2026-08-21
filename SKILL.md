@@ -1,6 +1,6 @@
 ---
 name: metallic-materials-academic-editor
-description: Scientifically constrained academic editing for metallic-materials papers, including physical metallurgy, phase transformations, precipitation, deformation, mechanical performance, fatigue and fracture, hydrogen embrittlement and environmental degradation, creep and high-temperature behavior, additive manufacturing, characterization, computational materials science, reviews, figure captions, and reviewer responses. Preserve all data, conditions, terminology, citation scope, and conclusion strength. Route each paper by its primary scientific question; distinguish evidence-proximal Results from cross-evidence Discussion; support both mechanism-centered and performance-centered narratives without inventing causal links or missing mechanisms. Adapt manuscripts to real journal formats (Nature family, Science, Acta/Scripta Materialia, IJP, and other top metallic-materials venues) and produce submission packages (highlights, cover letters, graphical-abstract plans, one-sentence summaries). Use for 润色、精修、中译英、英文重写、摘要重构、Results–Discussion 分工、全文主线、逻辑架构、证据审计、图序诊断、期刊格式适配、投稿材料（Highlights/Cover Letter/图形摘要文案）和审稿回复。
+description: Scientifically constrained academic editing for metallic-materials papers, including physical metallurgy, phase transformations, precipitation, deformation, mechanical performance, fatigue and fracture, hydrogen embrittlement and environmental degradation, creep and high-temperature behavior, additive manufacturing, characterization, computational materials science, reviews, figure captions, and reviewer responses. Preserve all data, conditions, terminology, citation scope, and conclusion strength. Route each paper by its primary scientific question; distinguish evidence-proximal Results from cross-evidence Discussion; support mechanism-centered and performance-centered narratives; and reconstruct Introductions from the paper's highest-level contribution, precise gap, new insight, evidence route, and applicability boundary without inventing causal links or missing mechanisms. Adapt manuscripts to real journal formats (Nature family, Science, Acta/Scripta Materialia, IJP, and other top metallic-materials venues) and produce submission packages (highlights, cover letters, graphical-abstract plans, one-sentence summaries). Use for 润色、精修、中译英、英文重写、摘要重构、Introduction 润色与重构、Results–Discussion 分工、全文主线、逻辑架构、证据审计、图序诊断、期刊格式适配、投稿材料（Highlights/Cover Letter/图形摘要文案）和审稿回复。
 version: 5.0.0
 ---
 
@@ -8,11 +8,12 @@ version: 5.0.0
 
 ## 快速开始
 
-最常见的三种用法，无需任何配置：
+最常见的四种用法，无需任何配置：
 
 1. **直接粘贴文本**：自动判定文本部分、论文类型和润色强度，按第 19 节默认设置输出完整模式（精修稿 + 关键修改说明 + 需作者确认的问题 + 诊断）。
 2. **粘贴文本 + 目标期刊**（如 "投 Acta Materialia" / "投 Nature Communications"）：在精修之上叠加期刊体裁适配（摘要体裁、长度上限、受众层次、压缩建议），见 `references/JOURNAL_ADAPTATION.md`。
-3. **投稿材料请求**（如 "写 Highlights" / "写 Cover Letter"）：基于已提供的正文或摘要生成投稿配套材料，主张强度与正文严格同级，见 `references/SUBMISSION_PACKAGE.md`。
+3. **Introduction 草稿 + 主要贡献**（如“围绕 new insight 重构这个 Introduction”）：自动判定发现导向或需求与性能导向，提取精确缺口并重写引言末段，见 `references/INTRODUCTION_LOGIC.md`。
+4. **投稿材料请求**（如 "写 Highlights" / "写 Cover Letter"）：基于已提供的正文或摘要生成投稿配套材料，主张强度与正文严格同级，见 `references/SUBMISSION_PACKAGE.md`。
 
 需要精细控制时才使用第 3 节的完整输入字段。
 
@@ -36,7 +37,7 @@ version: 5.0.0
 1. **科学完整性层**：数据、条件、术语、图表、引文范围和结论边界不可漂移。
 2. **句段表达层**：信息排序、句法主干、比较条件、证据强度、术语一致性和阅读节奏。
 3. **论文部分功能层**：摘要、引言、方法、结果、讨论、结论和图注各自承担明确任务。
-4. **科学叙事层**：根据核心问题选择机制、性能、变形、损伤、环境、方法或综述主线。
+4. **科学叙事层**：根据核心问题选择机制、性能、变形、损伤、环境、方法或综述主线；摘要和 Introduction 分别按其专用路由组织。
 5. **领域证据层**：针对同步辐射、氢脆、疲劳、相变、计算等高风险推断执行专门安全门。
 6. **期刊体裁层**：按目标期刊家族（Nature 系、Science 系、Acta/Scripta 系等）调整长度、摘要体裁、受众层次和投稿材料；体裁适配不改变科学内容。
 
@@ -48,6 +49,8 @@ version: 5.0.0
 
 - 类型判定与混合路由：`references/PAPER_TYPE_ROUTING.md`
 - 全文科学叙事和图序：`references/ARCHITECTURE_RULES.md`
+- Introduction 专用逻辑与重构：`references/INTRODUCTION_LOGIC.md`
+- Introduction 独立提示词：`references/PROMPT_INTRODUCTION_RECONSTRUCTION.md`
 - Results–Discussion 分工：`references/RESULTS_DISCUSSION_LOGIC.md`
 - 性能类论文：`references/PERFORMANCE_PAPER_LOGIC.md`
 - 主张与证据等级：`references/CLAIM_EVIDENCE_MATRIX.md`
@@ -63,6 +66,7 @@ version: 5.0.0
 加载规则：
 
 - 用户要求全文逻辑、主线、结构重组或图序时，加载 `references/ARCHITECTURE_RULES.md`。
+- 用户提供 Introduction 草稿并要求润色、提升、重构、收束、精确缺口、末段改写或围绕 `new insight` 组织时，加载 `references/INTRODUCTION_LOGIC.md`。
 - 用户询问 Results 与 Discussion、因果放置或段落归属时，加载 `references/RESULTS_DISCUSSION_LOGIC.md`。
 - 研究目标为获得优异性能、突破性能上限或缓解性能权衡时，加载 `references/PERFORMANCE_PAPER_LOGIC.md`。
 - 文本涉及同步辐射、氢脆、疲劳、峰宽、断口归因、原位过程或计算验证时，加载 `references/DOMAIN_EVIDENCE_MODULES.md`。
@@ -77,7 +81,7 @@ version: 5.0.0
 
 - 英文学术润色或中译英；
 - 中文科研描述改写为论文英语；
-- 摘要重构、引言收束、结果排序、讨论机制整合；
+- 摘要重构、Introduction 润色与重构、引言收束、精确缺口提炼、结果排序、讨论机制整合；
 - Results 与 Discussion 的拆分、合并或归属诊断；
 - 全文核心主张、证据链、机制链、性能链和图序诊断；
 - 因果强度、比较条件、适用范围和结论边界校准；
@@ -105,12 +109,14 @@ version: 5.0.0
 - 文本所属部分：题目 / 摘要 / 引言 / 方法 / 结果 / 讨论 / Results and Discussion / 结论 / 图注 / 补充材料 / 综述 / 审稿回复 / 全文
 - 主要论文类型：自动判定 / M / P / D / F / E / T / A / Q / C / R
 - 次要支撑类型：可选
-- 任务类型：语言精修 / 摘要重构 / Results–Discussion 分工 / 全文架构审阅 / 图序诊断 / 证据审计 / 期刊格式适配 / 投稿材料（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）/ 审稿回复
+- 任务类型：语言精修 / 摘要重构 / Introduction 重构 / Results–Discussion 分工 / 全文架构审阅 / 图序诊断 / 证据审计 / 期刊格式适配 / 投稿材料（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）/ 审稿回复
+- 摘要精修模式：自动 / 标准功能型 / 发现导向单链 / 设计与解决导向链
+- Introduction 模式：自动 / 发现导向 / 需求与性能导向
 - 润色强度：轻度语言校正 / 中度逻辑与语言优化 / 深度学术重写
 - 架构干预：关闭 / 仅诊断 / 在原文证据链内重排
 - Results–Discussion 处理：保持现有归属 / 给出调整建议 / 允许重新分配
 - 证据审计：关闭 / 简要 / 完整
-- 输出模式：仅精修稿 / 精修稿与关键说明 / 完整模式 / 架构审阅模式
+- 输出模式：仅精修稿 / 精修稿与关键说明 / 完整模式 / 架构审阅模式 / Introduction 完整模式 / Introduction 架构诊断模式
 
 ### 3.2 编辑权限字段
 
@@ -133,6 +139,19 @@ version: 5.0.0
 - 推断性证据：可选
 - 已知局限：可选
 - 必须保留的术语、缩写、变量、公式或固定表达：可选
+
+### 3.4 Introduction 专用字段
+
+- `Y`：本文最终解释、调节或实现的结果、现象或能力
+- `A`：当前最接近的公认解释、控制因素或设计策略
+- `C`：现有认识或策略失效的具体相、温度、尺度、成分、阶段或工程约束
+- `B`：精确缺失的前驱状态、机制步骤、定量贡献、耦合项或实现环节
+- `X`：本文发现或操控的关键变量、状态或路径
+- `M`：连接 `X` 与 `Y` 的中间过程
+- `E1–E3`：证明 `X`、`X → M` 和 `M → Y` 的主要证据
+- `G`：新增的解释、预测、调控或实施能力
+- 必须保留的引文组及其实际支撑命题
+- 是否需要新增文献检索
 
 ## 4. 不可更改的优先级
 
@@ -195,7 +214,9 @@ version: 5.0.0
 - 不同样品或不同位置被写成连续演化，但没有相继关系证据；
 - 性能记录或文献比较缺少可比条件；
 - 机制主张依赖未测量的局部氢、位错密度、界面结合或相分数；
-- 计算模型与实验状态的对应关系不清楚。
+- 计算模型与实验状态的对应关系不清楚；
+- Introduction 的精确缺口无法由现有引文材料支持；
+- Introduction 草稿没有提供能够确定全文最高层贡献的信息。
 
 ## 6. 主张—证据等级
 
@@ -446,19 +467,54 @@ Discussion 将局部结论连接为完整解释：
 
 摘要不得成为图表清单、方法清单或未经验证的机制宣传。
 
-### 12.3 引言
+### 12.3 Introduction
 
-引言按依赖关系收束：
+处理 Introduction 时加载 `references/INTRODUCTION_LOGIC.md`。
 
-1. 材料体系或应用问题；
-2. 具体组织、性能或失效过程；
-3. 已有认识；
-4. 精确缺口：缺哪类证据、哪一中间变量、哪一尺度连接或哪一适用条件；
-5. 先前方法为何不能解决；
-6. 本文问题、设计和证据路线；
-7. 引言末段用压缩主线说明本文将证明什么。
+先从题目、摘要、Results、Discussion 和 Conclusion 提取最高层贡献，再填写：
 
-不得以 few studies have investigated 代替具体知识缺口。
+```text
+Y：最终解释、调节或实现的结果
+A：当前最接近的共识或策略
+C：现有认识失效的具体条件
+B：精确缺失的关系、定量贡献或实现环节
+X：本文关键变量、状态或设计
+M：连接 X 与 Y 的过程
+E：证明各主要箭头的证据路线
+G：新增解释、预测、调控或实施能力
+```
+
+Introduction 的主路由为：
+
+- **发现导向**：正常预期、已知初态或当前解释在 `C` 下出现知识断点，本文通过 `X → M → Y` 解释未知现象或连接缺失路径；
+- **需求与性能导向**：目标能力 `Y` 和现有原理 `A` 已知，但在制造、尺度、稳定性、定量调控或多性能约束 `C` 下缺少实现环节 `B`，本文通过可控 `X` 建立 `M` 并获得 `Y`。
+
+优先使用四类精确缺口：
+
+1. 正常预期与观测结果冲突；
+2. 初态和终态之间的机制路径缺失；
+3. 多因素贡献、符号、敏感性或耦合关系未定量；
+4. 已知原理在明确工程约束下缺少可实施路径。
+
+引言通常采用三段式或四段式：
+
+```text
+价值与共识
+→ 最近邻研究和已有终点
+→ 具体边界、方法限制与精确缺口
+→ 本文的 X → M → Y、证据路线 E 和边界 G
+```
+
+规则：
+
+- 精确缺口与最高层贡献必须处于同一逻辑层级；
+- 文献按重要性、当前共识、最近前沿和精确缺口组织，不按年份或作者逐篇罗列；
+- 优先使用差异最小的最近邻对照压缩问题；
+- 方法必须对应缺失的可观测量，只在缺口之后出现；
+- 引言末段按正文证明顺序预告研究对象、`X`、`M`、`Y`、证据和边界；
+- 引文移动不得扩大其支撑命题；
+- 不得以 few studies have investigated、limited attention 或 remains unclear 代替具体缺口；
+- 只提供 Introduction 草稿且主要贡献不清时，不凭常识补写，列入作者确认项。
 
 ### 12.4 方法
 
@@ -631,22 +687,26 @@ Discussion 将局部结论连接为完整解释：
 2. 判定主论文类型和次要模块；
 3. 提取一句核心科学问题；
 4. 提取作者希望建立的主要主张；
-5. 将主张拆成 3–7 个环节；
-6. 为每个环节标注 L0–L7 证据等级；
-7. 将每个主张对应到原文数据、图表、计算、引文或直接观察；
-8. 锁定数值、单位、条件、符号、图表和引文；
-9. 判断每句话属于 Results 事实、局部推断，或 Discussion 综合解释；
-10. 检查初始状态、比较基准、时间顺序和中间变量；
-11. 对性能论文分开建立各性能来源及权衡缓解路径；
-12. 对混合论文确定唯一主线；
-13. 检查每段主要问题和每句中心命题；
-14. 检查图序是否形成证明序列；
-15. 在权限范围内重组；
-16. 校准因果、程度和推广措辞；
-17. 指定目标期刊时执行体裁适配（长度、摘要体裁、受众层次、压缩清单）；
-18. 生成投稿材料时逐条比对正文主张与证据等级，并核对字符/词数限制；
-19. 对照原文逐项确认无新增、无删除、无漂移；
-20. 将不能判断的问题列入作者确认项。
+5. 处理 Introduction 时，从题目、摘要、Results、Discussion 和 Conclusion 提取最高层贡献并判定发现导向或需求与性能导向；
+6. 处理 Introduction 时，填写 `Y、A、C、B、X、M、E、G`，检查缺口与贡献是否同级；
+7. 将主张拆成 3–7 个环节；
+8. 为每个环节标注 L0–L7 证据等级；
+9. 将每个主张对应到原文数据、图表、计算、引文或直接观察；
+10. 锁定数值、单位、条件、符号、图表和引文；
+11. 处理 Introduction 时，按重要性、共识、最近前沿和精确缺口审计文献，并核对引文支撑范围；
+12. 判断每句话属于 Results 事实、局部推断，或 Discussion 综合解释；
+13. 检查初始状态、比较基准、时间顺序和中间变量；
+14. 对性能论文分开建立各性能来源及权衡缓解路径；
+15. 对混合论文确定唯一主线；
+16. 检查每段主要问题和每句中心命题；
+17. 检查图序是否形成证明序列；
+18. 处理 Introduction 时，将方法逐一对应到缺失可观测量，并核对引言末段与首图及正文证据顺序；
+19. 在权限范围内重组；
+20. 校准因果、程度和推广措辞；
+21. 指定目标期刊时执行体裁适配（长度、摘要体裁、受众层次、压缩清单）；
+22. 生成投稿材料时逐条比对正文主张与证据等级，并核对字符/词数限制；
+23. 对照原文逐项确认无新增、无删除、无漂移；
+24. 将不能判断的问题列入作者确认项。
 
 不得输出内部逐步推理。可输出结构化诊断、证据映射和修改理由。
 
@@ -717,7 +777,23 @@ Discussion 将局部结论连接为完整解释：
 5. 图序证明任务；
 6. 缺失证据和可执行修改清单。
 
-### 18.5 投稿包模式
+### 18.5 Introduction 专用模式
+
+任务类型为 Introduction 重构时，根据用户选择输出：
+
+1. 重构后的 Introduction；
+2. 一句话核心新认识及最高证据等级；
+3. `Y、A、C、B、X、M、E、G`；
+4. 判定的发现导向或需求与性能导向；
+5. 精确缺口属于预期冲突、机制路径缺失、定量归因缺失或工程实现缺失中的哪一类；
+6. 段落功能映射和三段式或四段式选择理由；
+7. 缺口—贡献同级检查；
+8. 引文与核心动词的证据边界；
+9. 需作者确认的问题。
+
+用户选择 Introduction 架构诊断模式时，不生成重写稿，只输出上述第 2–9 项及建议段序。
+
+### 18.6 投稿包模式
 
 任务类型为投稿材料时输出：
 
@@ -733,21 +809,25 @@ Discussion 将局部结论连接为完整解释：
 - 目标语言：英文；
 - 文本部分：依据内容判断；
 - 论文类型：自动判定；
+- 摘要精修模式：自动；
+- Introduction 模式：自动；
 - 中文转英文：深度学术重写；
 - 已有英文：中度逻辑与语言优化；
 - 架构干预：单段仅诊断，完整章节或全文在原文证据链内重排；
 - Results–Discussion：保持现有归属并给出诊断；
 - 证据审计：简要；
 - 输出模式：完整模式；
+- Introduction 重构请求的默认输出：Introduction 完整模式；
 - 允许段内重排：是；
 - 允许跨段重排：否；
 - 允许跨小节移动：否；
 - 拼写体系：保持原文，无法判断时采用美式英语（目标期刊为 Nature 主刊时采用英式）；
 - 目标期刊：未指定时不启用期刊适配，默认按 Elsevier 全长文体裁输出；
 - 长度：接近原文，不为文风扩写；
-- 引文：尽量随支撑命题保留，范围不清时不移动。
+- 引文：尽量随支撑命题保留，范围不清时不移动；
+- 新增文献检索：默认关闭。
 
-用户明确要求“逻辑重组、全文主线、Results–Discussion 重写、摘要重构、期刊适配、投稿材料”时，启用对应模块，不额外询问可由原文判断的字段。跨小节移动仍需明确许可。
+用户明确要求“逻辑重组、全文主线、Results–Discussion 重写、摘要重构、Introduction 重构、期刊适配、投稿材料”时，启用对应模块，不额外询问可由原文判断的字段。跨小节移动仍需明确许可。
 
 ## 20. 最终核查
 
@@ -765,6 +845,10 @@ Discussion 将局部结论连接为完整解释：
 - 每句有清楚主干，每段回答一个问题；
 - 题目、摘要、引言末段、结果、讨论和结论的主张集合一致；
 - 图序可以复述论文的证明顺序；
+- 处理 Introduction 时，一句话贡献能够写成 `C 下的 X → M → Y`，精确缺口与贡献同级；
+- 处理 Introduction 时，已有研究回答到哪里、停在哪里及方法边界均得到说明；
+- 处理 Introduction 时，每种主要方法对应一个缺失可观测量，引言末段与首图和正文证据顺序一致；
+- 处理 Introduction 时，引文没有因重排扩大支撑范围，且未用宽泛陈述代替精确缺口；
 - 启用期刊适配时，长度、摘要体裁和受众层次符合目标家族，且科学内容未因体裁改变；
 - 投稿材料的每个主张可在正文定位、等级不升，且字符/词数已核对；
 - 不确定问题已经进入作者确认项；
