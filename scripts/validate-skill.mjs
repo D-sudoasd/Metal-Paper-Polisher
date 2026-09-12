@@ -1353,6 +1353,10 @@ for (const file of markdownFiles) {
   const text = readFileSync(file, "utf8");
   const rel = relative(root, file);
 
+  if (!text.endsWith("\n")) {
+    err(`${rel}: file must end with a newline (MD047).`);
+  }
+
   for (const match of text.matchAll(backtickRef)) {
     const target = match[1];
     checkedLinks++;
