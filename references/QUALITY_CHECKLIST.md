@@ -1,4 +1,16 @@
-# 精修与科学论证质量核查表（v5 · 摘要双路由与 Introduction 扩展）
+# 精修与科学论证质量核查表（v5 · 六种 section mode）
+
+## 0. 路由、覆盖与失败闭合
+
+- [ ] 已得到唯一的 `section_mode`：abstract / introduction / results / discussion / conclusion / full。
+- [ ] 已得到唯一的 `operation`：polish / rewrite / diagnose / restructure / consistency。
+- [ ] 用户希望的范围只记录为 `requested_context_level`；`context_level` 由实际收到的章节、section manifest 和 ledger 计算。
+- [ ] 输出说明 `coverage`、`not_checked`、`status` 和 `blockers`；仅精修稿在内部保留同等记录。
+- [ ] 只加载当前主模式与真正触发的叠加模块，没有对局部输入运行伪全文检查。
+- [ ] 缺少必要输入时已安全降级或阻断，没有用常识补齐证据、机制或章节。
+- [ ] `status` 仅使用 `ok / partial / fallback / author_confirmation_required / blocked`。
+- [ ] 未明确指定期刊时，`journal_overlay=off`。
+- [ ] 安全门优先于“仅精修稿”等输出偏好。
 
 ## 1. 科学信息锁定
 
@@ -76,6 +88,35 @@
 - [ ] 摘要发现或设计顺序与正文证明顺序一致。
 - [ ] Introduction 末段承诺的问题均由正文回答。
 - [ ] Conclusion 没有新增数据、机制或推广。
+
+### 7.1 跨章节 claim ledger（启用 partial/full consistency 时）
+
+- [ ] 每个核心主张具有稳定 `claim_id`、规范表述、条件、最高证据等级、证据定位、canonical owner 和状态。
+- [ ] Introduction 末段承诺的每个 claim 均由 Results 建立证据，并由 Discussion 闭合必要解释或明确保留缺口。
+- [ ] Title、Abstract 和 Conclusion 只压缩同一 claim 集合，没有提高任何 claim 的动词强度。
+- [ ] 同一 claim 的数值、单位、方向、比较基准、材料状态、温度、应变率、环境和尺度未跨章节漂移。
+- [ ] Discussion 的每个机制箭头能够回指 Results、图表、计算或引文；未闭合箭头已标记。
+- [ ] 每个 claim 只有一个 canonical owner；其他章节只作必要压缩或回指，重复没有伪装成新增证据。
+- [ ] 图号、表号、公式和引文存在且指向对应主张。
+- [ ] 缺失章节、截断文本、相互冲突的来源或无法解析的证据定位已进入 `blockers` 或作者确认项。
+
+### 7.2 Conclusion 专用（处理结论时）
+
+- [ ] 只有 Conclusion 文本时，输出明确标为 `coverage=local`，没有声称全文一致性通过。
+- [ ] 重构或一致性审计具有 Abstract + Results + Discussion，或等价的完整 claim ledger。
+- [ ] Conclusion 只回收 `established` 或明确标注为 bounded/partial 的主张。
+- [ ] 结论顺序是正文证明顺序的有序子集，未遗漏作者要求保留的已建立主张。
+- [ ] 没有新增数据、机制、比较、推广或正文未建立的应用意义。
+- [ ] 没有把 Discussion 的假说升级为确定性结论。
+- [ ] 数值、条件、方向或术语冲突时已停止科学重构并请求作者确认。
+
+### 7.3 Full-text 专用（处理全文时）
+
+- [ ] 章节 manifest 已列出 title、abstract、introduction、methods、results、discussion 或合并章节、conclusion 及其完整性。
+- [ ] 缺少核心章节时只给 partial/diagnostic 结果，没有输出“全文已一致”。
+- [ ] 跨章节移动、Results ↔ Discussion 重分配和移入补充材料均在授权范围内。
+- [ ] 删除仅限完全重复；唯一证据、条件、误差、比较基准和边界均保留。
+- [ ] 已记录重排、合并、删除、压缩、未执行操作及其原因。
 
 ## 8. Introduction 专用（处理引言时）
 
@@ -254,7 +295,16 @@
 - [ ] 投稿材料中每个主张可在正文定位。
 - [ ] 优先权词均有正文比较口径支持。
 
-## 16. 作者确认项
+## 16. 结果状态
+
+- [ ] `ok`：当前 coverage 内所有必需输入和硬门均通过。
+- [ ] `partial`：只完成可安全执行的部分，`not_checked` 明确列出未覆盖项。
+- [ ] `fallback`：请求的专用结构不成立，已退回较保守模式并说明理由。
+- [ ] `author_confirmation_required`：存在冲突或科学判断缺口，但可交付受限版本。
+- [ ] `blocked`：生成目标稿必须新增证据、裁决冲突或越过权限，因此只输出诊断。
+- [ ] 最终只选择一个主状态；具体问题分别列入 `blockers` 和作者确认项。
+
+## 17. 作者确认项
 
 - [ ] 数值、单位、图号或变量冲突已列出。
 - [ ] 缺失比较基准、测试条件或材料状态已列出。

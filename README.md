@@ -4,7 +4,7 @@
 
 <strong>金属材料学论文精修与科学论证技能 · 让每一个结论都站在证据上</strong>
 
-<em>A scientifically constrained AI editing skill for metallic-materials manuscripts — from sentence polish to full-paper argumentation, discovery/design abstract reconstruction, Introduction logic reconstruction, journal-format adaptation, and submission packages.</em>
+<em>A scientifically constrained AI editing skill for metallic-materials manuscripts — with dedicated Abstract, Introduction, Results, Discussion, Conclusion, and full-text modes.</em>
 
 [![Version](https://img.shields.io/badge/version-5.0.0-blue)](CHANGELOG.md)
 [![Skill Format](https://img.shields.io/badge/format-Agent%20Skill-8A2BE2)](SKILL.md)
@@ -12,7 +12,7 @@
 ![Domain](https://img.shields.io/badge/domain-Physical%20Metallurgy%20%C2%B7%20Mechanics%20of%20Materials-orange)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-teal)](#参与共建)
 
-[快速开始](#快速开始) · [核心能力](#核心能力) · [摘要双路由](#6-摘要发现设计双路由精修) · [Introduction 专用](#7-introduction-专用双路由重构) · [期刊覆盖](#8-按真实顶刊体裁适配) · [工作原理](#工作原理) · [文件地图](#文件地图)
+[快速开始](#快速开始) · [核心能力](#核心能力) · [六种模式](#3-六种-section-mode-路由) · [摘要双路由](#7-摘要发现设计双路由精修) · [Introduction 专用](#8-introduction-专用双路由重构) · [工作原理](#工作原理) · [文件地图](#文件地图)
 
 </div>
 
@@ -22,9 +22,9 @@
 
 一个面向**金属材料学**（物理冶金、相变析出、变形机制、疲劳断裂、氢脆环境损伤、高温蠕变、增材制造、表征方法、计算材料学）的学术编辑技能。可加载到 Claude、Cursor 等支持 Agent Skill 的工具中，也可直接使用仓库内提示词。
 
-它与通用“论文润色 prompt”的根本区别：**先审证据，再动语言；先判断贡献属于发现还是设计，再组织摘要和 Introduction。**
+它与通用“论文润色 prompt”的根本区别：**先确定当前 section 的职责和证据权限，再动语言；上下文不足时明确降级，不把局部润色伪装成全文审计。**
 
-> 通用润色器为了流畅会把 *A was accompanied by B* 写成 *A led to B*。语言变得顺滑，科学结论却被静默加强。本技能内置 L0–L7 主张—证据分级、领域安全门、论文类型路由、摘要发现/设计双路由、Introduction 精确缺口路由和逐句增量检查，保证润色后的因果动词与原文证据相匹配。
+> 通用润色器为了流畅会把 *A was accompanied by B* 写成 *A led to B*。语言变得顺滑，科学结论却被静默加强。本技能内置六种 section mode、L0–L7 主张—证据分级、上下文覆盖声明和失败闭合门，保证输出不会越过原文证据或所提供章节。
 
 ## 为什么需要它
 
@@ -60,19 +60,40 @@ L6 控制主导   controlled / governed / dominated
 
 润色只能保持或降低不受支持的强度，从不自动升级。设计动词同样受约束：`enables` 需要“设计动作—中间状态—结果”闭合，`solves`、`overcomes` 和 `eliminates` 需要更完整的边界验证。
 
-### 3. 十类论文叙事路由
+### 3. 六种 section mode 路由
+
+用户只需说明“处理哪一部分、做什么”。技能将请求规范化为三个轴：
+
+```text
+section_mode: abstract | introduction | results | discussion | conclusion | full
+operation: polish | rewrite | diagnose | restructure | consistency
+context_level: local | partial | full  # 由实际章节和 ledger 计算
+```
+
+| 模式 | 独立职责 | 关键安全门 |
+|---|---|---|
+| Abstract | 压缩核心主张并选择 standard/discovery/design 路线 | 只有摘要时不声称已与全文一致 |
+| Introduction | 从贡献反推精确缺口、必要性和证据路线 | 不把未知文献状态或缺失机制写成事实 |
+| Results | 报告直接证据、定量关系与最强局部判断 | 缺条件、基准或证据定位时不升级结论 |
+| Discussion | 联合证据闭合机制箭头、替代解释和边界 | 无 Results/EvidenceRecord 时不生成机制性重写 |
+| Conclusion | 按正文顺序回收已建立主张 | 无正文/ledger 时只做局部语言精修 |
+| Full text | 管理 claim ledger、章节归属、顺序和跨章节一致性 | 缺核心章节时只报告 partial，不冒充全文通过 |
+
+用户可以填写 `requested_context_level` 表示希望检查的范围，但不能自行把覆盖度声明为 full。每次模式完整输出都会给出统一 `route_decision`，其中包含实际 `context_level`、`coverage`、`not_checked`、`status` 和 `blockers`。完整契约见 [`references/SECTION_MODE_ROUTER.md`](references/SECTION_MODE_ROUTER.md)。旧字段“文本所属部分”“任务类型”“完整模式”继续兼容。
+
+### 4. 十类论文叙事路由
 
 按核心科学问题判定主线：组织演化 M、性能设计 P、变形分配 D、疲劳断裂 F、氢脆环境 E、高温蠕变 T、加工制造 A、表征方法 Q、计算模型 C、综述 R。混合论文强制单主线。
 
-### 4. Results–Discussion 第一性原理分工
+### 5. Results–Discussion 第一性原理分工
 
 归属由“结论离原始数据的距离”决定：当前图表可直接核查的局部判断留在 Results；需要跨图、跨尺度、模型和文献联合的完整机制进入 Discussion。因果不因章节名自动合法或非法。
 
-### 5. 领域证据安全门
+### 6. 领域证据安全门
 
 针对金属材料高风险推断的专门核查：同步辐射晶格应变与峰宽解释、氢脆机制识别（HELP/HEDE/氢化物）、疲劳驱动力可比性（ΔK/Kmax/R）、相变快照与动力学、DFT 与实际路径、性能文献基准。
 
-### 6. 摘要发现/设计双路由精修
+### 7. 摘要发现/设计双路由精修
 
 摘要可以显式选择：
 
@@ -147,7 +168,7 @@ L6 控制主导   controlled / governed / dominated
 
 存在无法汇合的第二主线、证据断裂或天然平行贡献时，退回标准功能型，不强行生成单链。
 
-### 7. Introduction 专用双路由重构
+### 8. Introduction 专用双路由重构
 
 Introduction 专用模块从全文最高层贡献反向生成必要性论证。它要求在写段落前先确定八项工作变量：
 
@@ -216,7 +237,7 @@ G：新增解释、预测、调控或实施能力
 - [`references/INTRODUCTION_LOGIC.md`](references/INTRODUCTION_LOGIC.md)
 - [`references/PROMPT_INTRODUCTION_RECONSTRUCTION.md`](references/PROMPT_INTRODUCTION_RECONSTRUCTION.md)
 
-### 8. 按真实顶刊体裁适配
+### 9. 按真实顶刊体裁适配
 
 依据期刊公开 Guide for Authors 整理成可执行规则：
 
@@ -230,7 +251,7 @@ G：新增解释、预测、调控或实施能力
 
 体裁适配只重排、压缩和调整受众层次，科学内容一个字不加。
 
-### 9. 投稿全流程材料
+### 10. 投稿全流程材料
 
 - **Highlights**：3–5 条、每条 ≤85 字符；
 - **Cover Letter**：250–450 词，写认识或能力增量；
@@ -239,7 +260,7 @@ G：新增解释、预测、调控或实施能力
 
 所有投稿材料与正文共享同一主张集合：正文写 `suggests`，Highlights 不写 `demonstrates`。
 
-### 10. 领域书写规范
+### 11. 领域书写规范
 
 非母语作者高频问题的系统清单：图表引用句式、时态、相名称冠词、单位与晶体学记法、中译英陷阱、悬垂修饰、指代和评价词强度。
 
@@ -249,16 +270,26 @@ G：新增解释、预测、调控或实施能力
 
 将本仓库放入技能目录，技能会按任务自动加载对应参考文件。
 
-六种零配置用法：
+六种 section mode 的自然语言用法：
 
 ```text
-① 直接粘贴论文文本
-② 粘贴文本 + “投 Acta Materialia”
-③ “基于这篇摘要写 Highlights”
-④ “按发现导向单链重构这个摘要”
-⑤ “按设计/解决导向重构这个性能摘要”
-⑥ “围绕主要贡献和 new insight 重构这个 Introduction”
+① “按发现导向单链重构这个摘要”
+② “围绕主要贡献和 new insight 重构这个 Introduction”
+③ “只精修 Results，保留图号和条件，不新增机制解释”
+④ “结合所附 Results 重写 Discussion，并列出每个机制箭头的证据”
+⑤ “检查 Conclusion 是否新增或强化了正文没有的主张”
+⑥ “审查全文主线、主张顺序和跨章节一致性；先不要跨章移动”
 ```
+
+也可显式填写三轴字段：
+
+```text
+section_mode: discussion
+operation: rewrite
+requested_context_level: partial
+```
+
+显式 section/operation 优先，旧字段仍兼容；requested context 只是希望范围。只有实际提供完整核心章节并通过一致性门，`context_level` 与 `coverage` 才会标为 `full`。
 
 ### 方式二：直接使用提示词
 
@@ -325,6 +356,15 @@ P2 或通常代价被抑制的原因：
 
 完整字段见 [`references/INPUT_TEMPLATE.md`](references/INPUT_TEMPLATE.md)。
 
+### 验证与边界
+
+```powershell
+npm ci
+npm test
+```
+
+自动验证检查 Agent Skill 元数据、Markdown 引用、六种 mode 的 manifest 契约、别名归一化、固定输出/gate 字段和 Markdown 格式。它不读取真实论文证据，也不能自动证明某个机制、主张或全文一致性成立；这类判断仍必须由当前 mode 按实际 `coverage`、ClaimRecord/EvidenceRecord 和 fail-closed 规则执行。
+
 ## 工作原理
 
 六层相互约束的架构，低层永远压制高层：
@@ -344,13 +384,13 @@ flowchart TD
     style F fill:#6a1b9a,color:#fff
 ```
 
-完整模式通常输出：精修稿 → 关键修改说明 → 需作者确认的问题 → 科学叙事诊断 → Results–Discussion 诊断。
+模式完整输出通常为：`route_decision` → 当前 section 的稿件或诊断 → 关键修改说明 → 主张/功能映射 → 需作者确认项 → 未执行检查。只有 `section_mode=full` 且覆盖度真实达到 `full` 时，才追加全文科学叙事和 Results–Discussion 一致性诊断。
 
 发现导向摘要追加：核心发现、S1–Sn 功能映射、新信息审计、核心动词边界。
 
 设计导向摘要追加：核心解决方案、设计类型、解决链、解释链、benchmark 审计和发现导向备选诊断。
 
-Introduction 完整模式追加：一句话核心新认识、`Y/A/C/B/X/M/E/G`、主路由、精确缺口类型、段落功能映射、缺口—贡献同级检查和引文证据审计。
+Introduction 完整模式追加：一句话核心新认识、`Y/A/C/B/X/M/E/G`、主路由、精确缺口类型、段落功能映射和缺口—贡献同级检查；引文与正文闭合只检查实际提供的材料。
 
 ## 与通用润色的对比
 
@@ -372,7 +412,19 @@ Introduction 完整模式追加：一句话核心新认识、`Y/A/C/B/X/M/E/G`�
 ```text
 ├── SKILL.md
 ├── CHANGELOG.md
+├── scripts/
+│   └── validate-skill.mjs
+├── tests/
+│   └── section-mode-fixtures.json
 └── references/
+    ├── SECTION_MODE_ROUTER.md
+    ├── SECTION_MODE_MANIFEST.json
+    ├── ABSTRACT_MODE.md
+    ├── INTRODUCTION_MODE.md
+    ├── RESULTS_MODE.md
+    ├── DISCUSSION_MODE.md
+    ├── CONCLUSION_MODE.md
+    ├── FULL_TEXT_MODE.md
     ├── PAPER_TYPE_ROUTING.md
     ├── ARCHITECTURE_RULES.md
     ├── INTRODUCTION_LOGIC.md
@@ -414,7 +466,7 @@ Introduction 完整模式追加：一句话核心新认识、`Y/A/C/B/X/M/E/G`�
 
 | 版本 | 定位 |
 |---|---|
-| Unreleased | 摘要发现/设计双路由 + Introduction 发现/需求双路由重构 |
+| Unreleased | 六种 section mode + 上下文覆盖/失败闭合 + 摘要与 Introduction 专用路由 |
 | v5.0.0 | 真实顶刊体裁对齐 + 投稿全流程材料 + 领域书写规范 |
 | v4.0.0 | 金属材料学通用化：十类路由、证据矩阵、Results–Discussion 分工 |
 | v3.0 | 全文主线、过程轨迹、理论—观察配对 |

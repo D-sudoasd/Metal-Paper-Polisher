@@ -9,7 +9,13 @@
 ## 输入
 
 - 目标语言：[英文 / 中文]
-- 目标期刊：[Acta Materialia / Scripta Materialia / 其他]
+- section_mode：abstract
+- operation：[polish / rewrite / diagnose / restructure / consistency]
+- requested_context_level：[local / partial / full / 自动]
+- context_level：[由实际材料自动计算，不手填]
+- 已提供章节：[摘要 / 题目 / Results / Discussion / Conclusion / 全文 ledger]
+- `target_journal`：[无 / Acta Materialia / Scripta Materialia / 其他]
+- `adaptation_permission`：[否 / 是；只有与 target_journal 同时提供时才可开启]
 - 主要论文类型：[自动 / M / P / D / F / E / T / A / Q / C / R]
 - 摘要精修模式：[核心发现单链]
 - 目标长度：[无 / 填写]
@@ -21,6 +27,8 @@
 - 推断性证据：[填写；可留空]
 - 已知局限：[填写；可留空]
 - 输出模式：[仅精修摘要 / 完整模式]
+
+“完整模式”只控制输出详细度，不表示 `context_level=full`。只有摘要时按 `coverage=local` 执行，不声称完成全文主张或证据一致性。未明确目标期刊时不启用期刊体裁。请求的发现单链无法由现有材料闭合时，安全门优先于“仅精修摘要”，返回保守摘要或诊断，不能补写主线。
 
 ## 科学保护
 
@@ -34,7 +42,7 @@
 
 ### 1. 提取唯一核心发现
 
-从全文主张中选择最上游、最新、证据闭合且能够统领最多结果的一项关系。核心发现应具有：
+从实际提供的摘要、正文片段或 ledger 中选择最上游、最新、证据闭合且能够统领当前材料最多结果的一项关系；只有 `context_level=full` 且全文材料满足完整契约时，才可称其为“全文主张”。核心发现应具有：
 
 ```text
 [upstream factor/process] + [evidence-calibrated verb] + [downstream phenomenon/capability]
@@ -149,6 +157,8 @@ A 为什么形成？
 无法通过前四项的句子应删除、压缩或后移。
 
 ## 输出
+
+除“仅精修摘要”外，先给出统一 `route_decision`（含 `section_mode / requested_operation / operation / paired_modes / journal_overlay / output_detail / requested_context_level / context_level / required_inputs / loaded_refs / skipped_checks / coverage / not_checked / status / blockers`）；发现链不成立时同时说明 fallback 理由。“仅精修摘要”也必须在内部执行同一安全门。
 
 ### 仅精修摘要
 

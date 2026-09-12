@@ -1,16 +1,26 @@
-# 每次使用的输入模板（v5 · 摘要双路由与 Introduction 扩展）
+# 每次使用的输入模板（v5 · 六种 section mode）
 
 ## 基本信息
 
 目标语言：
 
+`section_mode`：abstract / introduction / results / discussion / conclusion / full
+
+`operation`：polish / rewrite / diagnose / restructure / consistency
+
+`requested_context_level`：自动 / local / partial / full
+
+`context_level`：由技能根据实际章节和 ledger 计算，请勿手填
+
 文本所属部分：题目 / 摘要 / 引言 / 方法 / 结果 / 讨论 / Results and Discussion / 结论 / 图注 / 补充材料 / 综述 / 审稿回复 / 全文
+
+> 旧字段“文本所属部分”继续可用；显式 `section_mode` 优先。`Results and Discussion` 按实际请求路由为 Results、Discussion 或二者合并兼容流程。
 
 主要论文类型：自动判定 / M / P / D / F / E / T / A / Q / C / R
 
 次要支撑类型：
 
-任务类型：语言精修 / 摘要重构 / Introduction 重构 / Results–Discussion 分工 / 全文架构审阅 / 图序诊断 / 证据审计 / 期刊格式适配 / 投稿材料（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）/ 审稿回复
+任务类型：语言精修 / 改写 / 结构诊断 / 摘要重构 / Introduction 重构 / Results 重构 / Discussion 重构 / Conclusion 重构 / Conclusion 一致性审计 / Results–Discussion 分工 / 全文架构审阅 / 全文重构 / 全文一致性审计 / 图序诊断 / 证据审计 / 期刊格式适配 / 投稿材料（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）/ 审稿回复
 
 摘要精修模式：自动 / 标准功能型 / 发现导向单链（核心发现单链 / Mo式逻辑）/ 设计/解决导向链
 
@@ -24,9 +34,29 @@ Results–Discussion 处理：保持现有归属 / 给出调整建议 / 允许�
 
 证据审计：关闭 / 简要 / 完整
 
-输出模式：仅精修稿 / 精修稿与关键说明 / 完整模式 / 架构审阅模式 / Introduction 完整模式 / Introduction 架构诊断模式
+输出模式：仅精修稿 / 精修稿与关键说明 / 模式完整输出 / 架构审阅模式 / Introduction 完整模式 / Introduction 架构诊断模式
+
+失败闭合策略：安全降级 / 仅诊断
+
+期刊叠加：关闭 / 仅在“目标期刊 + 明确适配授权”同时提供时启用
+
+## 上下文清单
+
+已提供章节：title / abstract / introduction / methods / results / discussion / results_and_discussion / conclusion / figures_tables / supplementary
+
+每章状态：完整 / 部分 / 缺失
+
+希望检查的范围：仅当前文本 / 当前文本与所附上下文 / 全文
+
+已有 claim ledger：无 / 已附
+
+证据定位格式：章节-段落-句 / 图表 / 公式 / 计算 / 引文
+
+来源冲突处理：列入作者确认项（默认）
 
 ## 编辑权限
+
+`reorder_scope`：sentence / paragraph / section / cross_section
 
 允许段内重排：
 
@@ -34,13 +64,19 @@ Results–Discussion 处理：保持现有归属 / 给出调整建议 / 允许�
 
 允许跨小节移动：
 
+允许 Results ↔ Discussion 重新分配：
+
+允许移入补充材料：
+
 允许删除重复信息：
 
 允许压缩方法细节：
 
 英文拼写体系：
 
-目标期刊或参考期刊：
+`target_journal`：目标期刊或参考期刊；无则留空
+
+适配授权 `adaptation_permission`：否 / 是
 
 目标长度或字数限制：
 
@@ -177,6 +213,66 @@ Introduction 主路由：自动 / 发现导向 / 需求与性能导向
 引言末段必须保留的材料、尺度、温度或制造边界：
 
 首图或前两幅主图的证明任务：
+
+## Results 专用信息（处理结果时填写）
+
+Results 文本：
+
+对应图、表、计算或原始结果定位：
+
+材料状态、实验/计算条件和比较基准：
+
+允许保留的局部判断：
+
+作者认为应留在 Discussion 的解释：
+
+Introduction/Abstract 已承诺的待证明主张（如已提供）：
+
+## Discussion 专用信息（处理讨论时填写）
+
+Discussion 文本：
+
+作为解释起点的 Results 与图表：
+
+已有 claim/evidence ledger：
+
+需要闭合的机制箭头：
+
+原文已提出的替代解释：
+
+适用材料、状态、温度、应变率、环境和尺度边界：
+
+> 未提供 Results 或 EvidenceRecord 时，默认只做语言精修或结构诊断，不生成新的机制链。
+
+## Conclusion 专用信息（处理结论时填写）
+
+Conclusion 文本：
+
+用于回收主张的 Abstract、Results 和 Discussion：完整 / 部分 / 未提供
+
+必须保留的主张、数值、条件和边界：
+
+禁止新增或不希望强调的主张：
+
+希望检查：语言 / 主张覆盖 / 顺序 / 数值与条件 / 全部
+
+> 仅提供 Conclusion 时可以语言精修，但不能声明已完成全文一致性审计。
+
+## Full-text 专用信息（处理全文时填写）
+
+章节清单及每章完整性：
+
+作者认定的一句话核心问题和主要主张：
+
+图/表/公式/引文映射：
+
+已有 claim ledger 与 canonical owner（如有）：
+
+必须保持一致的术语、样品、条件、数值和方向：
+
+允许的跨章节操作及范围：
+
+缺失核心章节时：降级为局部/部分审计（默认） / 停止全文重构
 
 ## 科学主张和约束
 

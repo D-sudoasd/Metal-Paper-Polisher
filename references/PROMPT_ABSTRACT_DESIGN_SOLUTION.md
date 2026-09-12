@@ -9,7 +9,13 @@
 ## 输入
 
 - 目标语言：[英文 / 中文]
-- 目标期刊：[Acta Materialia / Scripta Materialia / Nature 系 / 其他]
+- section_mode：abstract
+- operation：[polish / rewrite / diagnose / restructure / consistency]
+- requested_context_level：[local / partial / full / 自动]
+- context_level：[由实际材料自动计算，不手填]
+- 已提供章节：[摘要 / 题目 / Results / Discussion / Conclusion / 全文 ledger]
+- `target_journal`：[无 / Acta Materialia / Scripta Materialia / Nature 系 / 其他]
+- `adaptation_permission`：[否 / 是；只有与 target_journal 同时提供时才可开启]
 - 主要论文类型：[自动 / P 性能设计 / A 加工制造 / F 疲劳断裂 / E 环境损伤 / 其他]
 - 摘要精修模式：[设计/解决导向链]
 - 目标长度：[无 / 填写]
@@ -26,6 +32,8 @@
 - 必须保留的术语、变量和公式：[填写；无则写无]
 - 输出模式：[仅精修摘要 / 完整模式]
 
+“完整模式”只控制输出详细度，不表示 `context_level=full`。只有摘要时按 `coverage=local` 执行，不声称全文设计链已经闭合。未明确目标期刊时不启用期刊体裁。设计动作—中间状态—性能或 P1/P2 证据缺失时，安全门优先于“仅精修摘要”，降级到标准/发现模式或只输出诊断，不能补写解决链。
+
 ## 科学保护
 
 1. 锁定全部数值、单位、成分、相名称、组织状态、工艺、测试条件、公式和引文范围。
@@ -39,7 +47,7 @@
 
 ### 1. 判定是否适合设计/解决导向
 
-优先判断全文最强贡献是否是：
+优先判断实际提供材料中最强且证据可追溯的贡献是否是；只有 `context_level=full` 且全文材料满足完整契约时，才可称其为“全文最强贡献”：
 
 ```text
 通过可控设计 X，实现过去难以获得的能力 Y。
@@ -186,6 +194,8 @@ P1–P2 权衡 → 设计 X → P1 来源 → P2 保留 → 综合指标
 ```
 
 ## 输出
+
+除“仅精修摘要”外，先给出统一 `route_decision`（含 `section_mode / requested_operation / operation / paired_modes / journal_overlay / output_detail / requested_context_level / context_level / required_inputs / loaded_refs / skipped_checks / coverage / not_checked / status / blockers`）；设计链不成立时同时说明 fallback 理由。“仅精修摘要”也必须在内部执行同一安全门。
 
 ### 仅精修摘要
 

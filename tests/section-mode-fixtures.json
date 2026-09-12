@@ -1,0 +1,493 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "Routing fixtures for alias normalization, content-derived coverage, paired-mode loading, and journal-overlay gates.",
+  "fixtures": [
+    {
+      "id": "abstract-en-polish-local",
+      "tags": ["english", "canonical", "single-section", "local"],
+      "request": {
+        "section_mode": "abstract",
+        "operation": "polish",
+        "context_level": "local"
+      },
+      "expected_route": {
+        "section_mode": "abstract",
+        "operation": "polish",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "abstract-zh-legacy-restructure-local",
+      "tags": ["chinese", "legacy", "single-section", "local"],
+      "request": {
+        "文本所属部分": "摘要",
+        "任务类型": "结构重排",
+        "上下文覆盖": "局部"
+      },
+      "expected_route": {
+        "section_mode": "abstract",
+        "operation": "restructure",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "introduction-en-rewrite-partial",
+      "tags": ["english", "canonical", "partial"],
+      "request": {
+        "section_mode": "introduction",
+        "operation": "rewrite",
+        "context_level": "partial",
+        "sections": {"abstract": "Abstract context."}
+      },
+      "expected_route": {
+        "section_mode": "introduction",
+        "operation": "rewrite",
+        "context_level": "partial"
+      }
+    },
+    {
+      "id": "introduction-zh-legacy-consistency-partial",
+      "tags": ["chinese", "legacy", "partial"],
+      "request": {
+        "文本所属部分": "引言",
+        "任务类型": "一致性检查",
+        "上下文覆盖": "部分上下文",
+        "sections": {"results": "Results context."}
+      },
+      "expected_route": {
+        "section_mode": "introduction",
+        "operation": "consistency",
+        "context_level": "partial"
+      }
+    },
+    {
+      "id": "results-en-diagnose-local",
+      "tags": ["english", "canonical", "single-section", "local"],
+      "request": {
+        "section_mode": "results",
+        "operation": "diagnose",
+        "context_level": "local"
+      },
+      "expected_route": {
+        "section_mode": "results",
+        "operation": "diagnose",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "results-zh-legacy-rewrite-partial",
+      "tags": ["chinese", "legacy", "partial"],
+      "request": {
+        "文本所属部分": "结果",
+        "任务类型": "重写",
+        "上下文覆盖": "部分全文",
+        "sections": {"abstract": "Abstract context."}
+      },
+      "expected_route": {
+        "section_mode": "results",
+        "operation": "rewrite",
+        "context_level": "partial"
+      }
+    },
+    {
+      "id": "discussion-en-polish-partial",
+      "tags": ["english", "canonical", "partial"],
+      "request": {
+        "section_mode": "discussion",
+        "operation": "polish",
+        "context_level": "partial",
+        "sections": {"results": "Results context."}
+      },
+      "expected_route": {
+        "section_mode": "discussion",
+        "operation": "polish",
+        "context_level": "partial"
+      }
+    },
+    {
+      "id": "discussion-zh-legacy-diagnose-full",
+      "tags": ["chinese", "legacy", "full"],
+      "request": {
+        "文本所属部分": "讨论",
+        "任务类型": "诊断",
+        "上下文覆盖": "全文上下文",
+        "sections": {
+          "title": "Title",
+          "abstract": "Abstract",
+          "introduction": "Introduction",
+          "methods": "Methods",
+          "results": "Results",
+          "discussion": "Discussion",
+          "conclusion": "Conclusion"
+        },
+        "section_manifest": {
+          "provided": ["title", "abstract", "introduction", "methods", "results", "discussion", "conclusion"],
+          "missing": [],
+          "source": "author"
+        },
+        "evidence": {"claim_records": [{"id": "C1"}], "evidence_records": [{"id": "E1"}]}
+      },
+      "expected_route": {
+        "section_mode": "discussion",
+        "operation": "diagnose",
+        "context_level": "full"
+      }
+    },
+    {
+      "id": "conclusion-en-restructure-full",
+      "tags": ["english", "canonical", "full"],
+      "request": {
+        "section_mode": "conclusion",
+        "operation": "restructure",
+        "context_level": "full",
+        "sections": {
+          "title": "Title",
+          "abstract": "Abstract",
+          "introduction": "Introduction",
+          "methods": "Methods",
+          "results": "Results",
+          "discussion": "Discussion",
+          "conclusion": "Conclusion"
+        },
+        "section_manifest": {
+          "provided": ["title", "abstract", "introduction", "methods", "results", "discussion", "conclusion"],
+          "missing": [],
+          "source": "author"
+        },
+        "evidence": {"claim_records": [{"id": "C1"}], "evidence_records": [{"id": "E1"}]}
+      },
+      "expected_route": {
+        "section_mode": "conclusion",
+        "operation": "restructure",
+        "context_level": "full"
+      }
+    },
+    {
+      "id": "conclusion-zh-legacy-polish-partial",
+      "tags": ["chinese", "legacy", "partial"],
+      "request": {
+        "文本所属部分": "结论",
+        "任务类型": "润色",
+        "上下文覆盖": "部分上下文",
+        "sections": {"results": "Results context."}
+      },
+      "expected_route": {
+        "section_mode": "conclusion",
+        "operation": "polish",
+        "context_level": "partial"
+      }
+    },
+    {
+      "id": "full-axis-en-diagnose",
+      "tags": ["english", "canonical", "explicit-axis"],
+      "request": {
+        "section_mode": "full",
+        "operation": "diagnose",
+        "context_level": "full",
+        "sections": {
+          "title": "Title",
+          "abstract": "Abstract",
+          "introduction": "Introduction",
+          "methods": "Methods",
+          "results": "Results",
+          "discussion": "Discussion",
+          "conclusion": "Conclusion"
+        },
+        "section_manifest": {
+          "provided": ["title", "abstract", "introduction", "methods", "results", "discussion", "conclusion"],
+          "missing": [],
+          "source": "author"
+        },
+        "evidence": {"claim_records": [{"id": "C1"}], "evidence_records": [{"id": "E1"}]}
+      },
+      "expected_route": {
+        "section_mode": "full",
+        "operation": "diagnose",
+        "context_level": "full"
+      }
+    },
+    {
+      "id": "requested-full-local-coverage-normalization",
+      "tags": ["english", "canonical", "explicit-axis", "semantic-not-coverage", "local"],
+      "request": {
+        "section_mode": "introduction",
+        "operation": "rewrite",
+        "context_scope": "full"
+      },
+      "expected_route": {
+        "section_mode": "introduction",
+        "operation": "rewrite",
+        "requested_context_level": "full",
+        "context_level": "local",
+        "coverage": "local"
+      }
+    },
+    {
+      "id": "full-zh-legacy-consistency-full",
+      "tags": ["chinese", "legacy", "full", "full-consistency"],
+      "request": {
+        "文本所属部分": "全文",
+        "任务类型": "一致性检查",
+        "上下文覆盖": "全文上下文",
+        "sections": {
+          "title": "Title",
+          "abstract": "Abstract",
+          "introduction": "Introduction",
+          "methods": "Methods",
+          "results": "Results",
+          "discussion": "Discussion",
+          "conclusion": "Conclusion"
+        },
+        "section_manifest": {
+          "provided": ["title", "abstract", "introduction", "methods", "results", "discussion", "conclusion"],
+          "missing": [],
+          "source": "author"
+        },
+        "evidence": {"claim_records": [{"id": "C1"}], "evidence_records": [{"id": "E1"}]}
+      },
+      "expected_route": {
+        "section_mode": "full",
+        "operation": "consistency",
+        "context_level": "full"
+      }
+    },
+    {
+      "id": "full-en-consistency-full",
+      "tags": ["english", "canonical", "full", "full-consistency"],
+      "request": {
+        "section_mode": "full",
+        "operation": "consistency",
+        "context_level": "full",
+        "sections": {
+          "title": "Title",
+          "abstract": "Abstract",
+          "introduction": "Introduction",
+          "methods": "Methods",
+          "results": "Results",
+          "discussion": "Discussion",
+          "conclusion": "Conclusion"
+        },
+        "section_manifest": {
+          "provided": ["title", "abstract", "introduction", "methods", "results", "discussion", "conclusion"],
+          "missing": [],
+          "source": "author"
+        },
+        "evidence": {"claim_records": [{"id": "C1"}], "evidence_records": [{"id": "E1"}]}
+      },
+      "expected_route": {
+        "section_mode": "full",
+        "operation": "consistency",
+        "context_level": "full"
+      }
+    },
+    {
+      "id": "task-abstract-reconstruction-only",
+      "tags": ["chinese", "legacy", "task-alias", "single-section", "local"],
+      "request": {
+        "任务类型": "摘要重构"
+      },
+      "expected_route": {
+        "section_mode": "abstract",
+        "operation": "restructure",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "task-introduction-reconstruction-context",
+      "tags": ["english", "legacy", "task-alias", "partial"],
+      "request": {
+        "任务类型": "Introduction 重构",
+        "context_scope": "部分上下文",
+        "sections": {"abstract": "Abstract context."}
+      },
+      "expected_route": {
+        "section_mode": "introduction",
+        "operation": "restructure",
+        "context_level": "partial"
+      }
+    },
+    {
+      "id": "task-results-reconstruction-only",
+      "tags": ["english", "legacy", "task-alias", "single-section", "local"],
+      "request": {
+        "任务类型": "Results 重构"
+      },
+      "expected_route": {
+        "section_mode": "results",
+        "operation": "restructure",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "task-discussion-reconstruction-context",
+      "tags": ["english", "legacy", "task-alias", "partial"],
+      "request": {
+        "任务类型": "Discussion 重构",
+        "context_scope": "部分全文",
+        "sections": {"results": "Results context."}
+      },
+      "expected_route": {
+        "section_mode": "discussion",
+        "operation": "restructure",
+        "context_level": "partial"
+      }
+    },
+    {
+      "id": "task-conclusion-consistency-only",
+      "tags": ["english", "legacy", "task-alias", "single-section", "local"],
+      "request": {
+        "任务类型": "Conclusion 一致性审计"
+      },
+      "expected_route": {
+        "section_mode": "conclusion",
+        "operation": "consistency",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "task-full-consistency-context",
+      "tags": ["english", "legacy", "task-alias", "full", "full-consistency"],
+      "request": {
+        "任务类型": "全文一致性审计",
+        "context_scope": "全文上下文",
+        "sections": {
+          "title": "Title",
+          "abstract": "Abstract",
+          "introduction": "Introduction",
+          "methods": "Methods",
+          "results": "Results",
+          "discussion": "Discussion",
+          "conclusion": "Conclusion"
+        },
+        "section_manifest": {
+          "provided": ["title", "abstract", "introduction", "methods", "results", "discussion", "conclusion"],
+          "missing": [],
+          "source": "author"
+        },
+        "evidence": {"claim_records": [{"id": "C1"}], "evidence_records": [{"id": "E1"}]}
+      },
+      "expected_route": {
+        "section_mode": "full",
+        "operation": "consistency",
+        "context_level": "full"
+      }
+    },
+    {
+      "id": "task-alias-explicit-section-wins",
+      "tags": ["chinese", "legacy", "task-alias", "single-section", "local"],
+      "request": {
+        "section_mode": "results",
+        "任务类型": "摘要重构",
+        "context_scope": "局部"
+      },
+      "expected_route": {
+        "section_mode": "results",
+        "operation": "restructure",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "task-alias-explicit-operation-wins",
+      "tags": ["chinese", "legacy", "task-alias", "single-section", "local"],
+      "request": {
+        "operation": "polish",
+        "任务类型": "摘要重构",
+        "context_scope": "局部"
+      },
+      "expected_route": {
+        "section_mode": "abstract",
+        "operation": "polish",
+        "context_level": "local"
+      }
+    },
+    {
+      "id": "task-results-discussion-paired",
+      "tags": ["english", "legacy", "task-alias", "partial"],
+      "request": {
+        "任务类型": "Results–Discussion 分工",
+        "context_scope": "部分上下文",
+        "sections": {"results": "Results context.", "discussion": "Discussion context."}
+      },
+      "expected_route": {
+        "section_mode": "results",
+        "operation": "diagnose",
+        "context_level": "partial",
+        "paired_modes": ["results", "discussion"]
+      }
+    },
+    {
+      "id": "task-journal-adaptation-overlay",
+      "tags": ["chinese", "legacy", "task-alias", "full"],
+      "request": {
+        "任务类型": "期刊格式适配"
+      },
+      "expected_route": {
+        "section_mode": "full",
+        "operation": "diagnose",
+        "context_level": "local",
+        "journal_overlay": "off"
+      }
+    },
+    {
+      "id": "section-paired-alias-without-composite-task",
+      "tags": ["chinese", "legacy", "paired-alias", "partial"],
+      "request": {
+        "文本所属部分": "结果与讨论",
+        "operation": "diagnose",
+        "context_scope": "部分上下文",
+        "sections": {"results": "Results context.", "discussion": "Discussion context."}
+      },
+      "expected_route": {
+        "section_mode": "results",
+        "operation": "diagnose",
+        "context_level": "partial",
+        "paired_modes": ["results", "discussion"]
+      }
+    },
+    {
+      "id": "requested-full-local-canonical-context",
+      "tags": ["english", "canonical", "semantic-not-coverage", "local"],
+      "request": {
+        "section_mode": "introduction",
+        "operation": "rewrite",
+        "requested_context_level": "full"
+      },
+      "expected_route": {
+        "section_mode": "introduction",
+        "operation": "rewrite",
+        "requested_context_level": "full",
+        "context_level": "local",
+        "coverage": "local"
+      }
+    },
+    {
+      "id": "journal-adaptation-authorized",
+      "tags": ["english", "canonical", "journal-overlay", "local"],
+      "request": {
+        "任务类型": "期刊格式适配",
+        "target_journal": "Acta Materialia",
+        "adaptation_permission": true
+      },
+      "expected_route": {
+        "section_mode": "full",
+        "operation": "diagnose",
+        "context_level": "local",
+        "journal_overlay": "on"
+      }
+    },
+    {
+      "id": "journal-adaptation-without-permission",
+      "tags": ["english", "canonical", "journal-overlay", "local"],
+      "request": {
+        "任务类型": "期刊格式适配",
+        "target_journal": "Acta Materialia"
+      },
+      "expected_route": {
+        "section_mode": "full",
+        "operation": "diagnose",
+        "context_level": "local",
+        "journal_overlay": "off"
+      }
+    }
+  ]
+}
