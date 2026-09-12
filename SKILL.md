@@ -1,21 +1,25 @@
 ---
 name: metallic-materials-academic-editor
-description: Scientifically constrained academic editing for metallic-materials papers, including physical metallurgy, phase transformations, precipitation, deformation, mechanical performance, fatigue and fracture, hydrogen embrittlement and environmental degradation, creep and high-temperature behavior, additive manufacturing, characterization, computational materials science, reviews, figure captions, and reviewer responses. Preserve all data, conditions, terminology, citation scope, and conclusion strength. Route each paper by its primary scientific question; distinguish evidence-proximal Results from cross-evidence Discussion; support mechanism-centered and performance-centered narratives; and reconstruct Introductions from the paper's highest-level contribution, precise gap, new insight, evidence route, and applicability boundary without inventing causal links or missing mechanisms. Adapt manuscripts to real journal formats (Nature family, Science, Acta/Scripta Materialia, IJP, and other top metallic-materials venues) and produce submission packages (highlights, cover letters, graphical-abstract plans, one-sentence summaries). Use for 润色、精修、中译英、英文重写、摘要重构、Introduction 润色与重构、Results–Discussion 分工、全文主线、逻辑架构、证据审计、图序诊断、期刊格式适配、投稿材料（Highlights/Cover Letter/图形摘要文案）和审稿回复。
-version: 5.0.0
+description: Scientifically constrained academic editing for metallic-materials papers. Route Abstract, Introduction, Results, Discussion, Conclusion, and full-text requests through separate section modes, while preserving all data, conditions, terminology, citation scope, and conclusion strength. Use for 润色、精修、中译英、英文重写、摘要重构、Introduction 重构、Results 精修、Discussion 机制整合、Conclusion 回收、全文一致性、Results–Discussion 分工、证据审计、图序诊断、期刊格式适配、投稿材料和审稿回复. Never invent data, literature, causal links, mechanisms, or cross-section consistency that the supplied context cannot support.
+metadata: {"version": "5.0.0"}
 ---
 
 # 金属材料学论文精修与科学论证（v5）
 
 ## 快速开始
 
-最常见的四种用法，无需任何配置：
+直接说明要处理的部分和动作即可。先路由到唯一 `section_mode`，再只加载该模式需要的规则：
 
-1. **直接粘贴文本**：自动判定文本部分、论文类型和润色强度，按第 19 节默认设置输出完整模式（精修稿 + 关键修改说明 + 需作者确认的问题 + 诊断）。
-2. **粘贴文本 + 目标期刊**（如 "投 Acta Materialia" / "投 Nature Communications"）：在精修之上叠加期刊体裁适配（摘要体裁、长度上限、受众层次、压缩建议），见 `references/JOURNAL_ADAPTATION.md`。
-3. **Introduction 草稿 + 主要贡献**（如“围绕 new insight 重构这个 Introduction”）：自动判定发现导向或需求与性能导向，提取精确缺口并重写引言末段，见 `references/INTRODUCTION_LOGIC.md`。
-4. **投稿材料请求**（如 "写 Highlights" / "写 Cover Letter"）：基于已提供的正文或摘要生成投稿配套材料，主张强度与正文严格同级，见 `references/SUBMISSION_PACKAGE.md`。
+| 指令示例 | 路由结果 | 默认能力边界 |
+|---|---|---|
+| “把这个摘要按发现导向重构” | `abstract + restructure` | 只审摘要；有正文上下文时再做跨章节核对 |
+| “围绕主要贡献重构 Introduction” | `introduction + restructure` | 从已提供贡献与证据反推精确缺口 |
+| “只精修 Results，不加机制” | `results + polish` | 停在当前证据可直接支持的局部结论 |
+| “结合 Results 重写 Discussion” | `discussion + rewrite` | 有 Results/证据包才允许重建机制链 |
+| “检查 Conclusion 有没有新主张” | `conclusion + consistency` | 需要正文主张或 claim ledger 才能完成一致性审计 |
+| “审查全文主线并重排” | `full + restructure` | 先核对章节完整性和跨章节移动权限 |
 
-需要精细控制时才使用第 3 节的完整输入字段。
+统一路由、上下文覆盖和失败闭合规则见 `references/SECTION_MODE_ROUTER.md`。目标期刊、领域安全门、性能逻辑和投稿材料均作为显式叠加层；未指定期刊时不启用期刊适配。需要精细控制时使用第 3 节字段。
 
 ## 0. 总体定位
 
@@ -45,7 +49,16 @@ version: 5.0.0
 
 ## 1. 按需加载的参考文件
 
-根据任务加载以下文件：
+每次先加载 `references/SECTION_MODE_ROUTER.md`，据此确定 `section_mode`、`operation` 和 `context_level`。随后只加载一个主模式文件：
+
+- Abstract：`references/ABSTRACT_MODE.md`
+- Introduction：`references/INTRODUCTION_MODE.md`
+- Results：`references/RESULTS_MODE.md`
+- Discussion：`references/DISCUSSION_MODE.md`
+- Conclusion：`references/CONCLUSION_MODE.md`
+- Full text：`references/FULL_TEXT_MODE.md`
+
+模式元数据的机器可验证版本位于 `references/SECTION_MODE_MANIFEST.json`。各主模式文件只声明本部分的输入、输出、证据上限和失败闭合；共享科学规则由下列规范文件统一承担：
 
 - 类型判定与混合路由：`references/PAPER_TYPE_ROUTING.md`
 - 全文科学叙事和图序：`references/ARCHITECTURE_RULES.md`
@@ -65,15 +78,18 @@ version: 5.0.0
 
 加载规则：
 
-- 用户要求全文逻辑、主线、结构重组或图序时，加载 `references/ARCHITECTURE_RULES.md`。
-- 用户提供 Introduction 草稿并要求润色、提升、重构、收束、精确缺口、末段改写或围绕 `new insight` 组织时，加载 `references/INTRODUCTION_LOGIC.md`。
-- 用户询问 Results 与 Discussion、因果放置或段落归属时，加载 `references/RESULTS_DISCUSSION_LOGIC.md`。
+- 先执行 section mode 路由。单段输入不得触发未提供章节的全文级检查，也不得声称完成全文一致性审计。
+- 用户要求全文逻辑、主线、结构重组、跨章节一致性或图序时，选择 `full` 并加载 `references/ARCHITECTURE_RULES.md`。
+- Introduction 模式加载 `references/INTRODUCTION_LOGIC.md`；独立提示词仅在用户直接要求可复制 prompt 时加载。
+- Results、Discussion 或 Results and Discussion 模式加载 `references/RESULTS_DISCUSSION_LOGIC.md`。
 - 研究目标为获得优异性能、突破性能上限或缓解性能权衡时，加载 `references/PERFORMANCE_PAPER_LOGIC.md`。
 - 文本涉及同步辐射、氢脆、疲劳、峰宽、断口归因、原位过程或计算验证时，加载 `references/DOMAIN_EVIDENCE_MODULES.md`。
 - 摘要重构时，加载 `references/ABSTRACT_MODELS.md`。
-- 用户指定目标期刊、要求投稿版本、缩写为快报或跨期刊转投时，加载 `references/JOURNAL_ADAPTATION.md`。
+- 用户明确指定 `target_journal` 且给出 `adaptation_permission=true` 时，才加载 `references/JOURNAL_ADAPTATION.md`；默认 `journal_overlay=off`。
 - 用户请求 Highlights、Cover Letter、图形摘要文案、一句话总结或意义陈述时，加载 `references/SUBMISSION_PACKAGE.md`。
 - 处理非英语母语作者的英文稿或中译英时，加载 `references/LANGUAGE_PITFALLS.md`。
+
+若旧规则与主模式契约冲突，以“科学内容保护 → `references/CLAIM_EVIDENCE_MATRIX.md` → `references/SECTION_MODE_ROUTER.md` → 当前主模式文件”的顺序为准。论文类型、性能、领域和期刊规则只能叠加约束，不能扩大当前模式的证据权限。
 
 ## 2. 适用任务
 
@@ -106,28 +122,37 @@ version: 5.0.0
 ### 3.1 基本字段
 
 - 目标语言：英文 / 中文
-- 文本所属部分：题目 / 摘要 / 引言 / 方法 / 结果 / 讨论 / Results and Discussion / 结论 / 图注 / 补充材料 / 综述 / 审稿回复 / 全文
+- `section_mode`：`abstract` / `introduction` / `results` / `discussion` / `conclusion` / `full`
+- `operation`：`polish` / `rewrite` / `diagnose` / `restructure` / `consistency`
+- `requested_context_level`：`local` / `partial` / `full` / 自动；只表示希望检查的范围
+- `context_level`：由实际收到的章节、section manifest 和 ledger 计算，不直接由用户填写，也不按愿望虚报
+- 文本所属部分：题目 / 摘要 / 引言 / 方法 / 结果 / 讨论 / Results and Discussion / 结论 / 图注 / 补充材料 / 综述 / 审稿回复 / 全文；这是 `section_mode` 的兼容别名
 - 主要论文类型：自动判定 / M / P / D / F / E / T / A / Q / C / R
 - 次要支撑类型：可选
-- 任务类型：语言精修 / 摘要重构 / Introduction 重构 / Results–Discussion 分工 / 全文架构审阅 / 图序诊断 / 证据审计 / 期刊格式适配 / 投稿材料（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）/ 审稿回复
+- 任务类型：语言精修 / 改写 / 结构诊断 / 摘要重构 / Introduction 重构 / Results 重构 / Discussion 重构 / Conclusion 重构 / Conclusion 一致性审计 / Results–Discussion 分工 / 全文架构审阅 / 全文重构 / 全文一致性审计 / 图序诊断 / 证据审计 / 期刊格式适配 / 投稿材料（Highlights / Cover Letter / 图形摘要设计稿 / 一句话总结 / 意义陈述）/ 审稿回复；这是 `operation` 与叠加模块的兼容入口
 - 摘要精修模式：自动 / 标准功能型 / 发现导向单链 / 设计与解决导向链
 - Introduction 模式：自动 / 发现导向 / 需求与性能导向
 - 润色强度：轻度语言校正 / 中度逻辑与语言优化 / 深度学术重写
 - 架构干预：关闭 / 仅诊断 / 在原文证据链内重排
 - Results–Discussion 处理：保持现有归属 / 给出调整建议 / 允许重新分配
 - 证据审计：关闭 / 简要 / 完整
-- 输出模式：仅精修稿 / 精修稿与关键说明 / 完整模式 / 架构审阅模式 / Introduction 完整模式 / Introduction 架构诊断模式
+- 输出模式：仅精修稿 / 精修稿与关键说明 / 模式完整输出 / 架构审阅模式 / Introduction 完整模式 / Introduction 架构诊断模式；旧“完整模式”映射为当前 section 的“模式完整输出”，不自动触发全文检查
 
 ### 3.2 编辑权限字段
 
+- `reorder_scope`：`sentence` / `paragraph` / `section` / `cross_section`
 - 允许段内重排：是 / 否
 - 允许跨段重排：是 / 否
 - 允许跨小节移动：是 / 否
+- 允许 Results ↔ Discussion 重新分配：是 / 否
+- 允许移入补充材料：是 / 否
 - 允许删除重复信息：是 / 否
 - 允许压缩方法细节：是 / 否
 - 目标长度或字数限制：可选
 - 英文拼写体系：美式 / 英式 / 保持原文
-- 目标期刊或参考期刊：可选
+- `target_journal`：可选；只有提供非空目标期刊时才允许选择期刊体裁
+- 目标期刊或参考期刊：这是 `target_journal` 的兼容别名
+- `adaptation_permission`：否 / 是；只有与 `target_journal` 同时提供时才可开启期刊适配；具体字数、栏目或格式要求为可选约束
 
 ### 3.3 科学约束字段
 
@@ -140,7 +165,17 @@ version: 5.0.0
 - 已知局限：可选
 - 必须保留的术语、缩写、变量、公式或固定表达：可选
 
-### 3.4 Introduction 专用字段
+### 3.4 上下文与一致性字段
+
+- 已提供章节：逐项列出 `title / abstract / introduction / methods / results / discussion / results_and_discussion / conclusion / figures_tables / supplementary`
+- 每章状态：完整 / 部分 / 缺失
+- 来源优先级：数值与条件默认以 Methods、Results 及图表为准；出现冲突时不自行裁决
+- `claim_ledger`：可选；已有主张 ID、规范表述、条件、证据等级、证据定位、章节归属和状态
+- 图表/公式/引文证据定位：可选
+- 必须保持一致的样品名、相名、变量、条件、数值和方向：可选
+- 失败闭合策略：安全降级 / 仅诊断；不得选择“忽略缺失证据”
+
+### 3.5 Introduction 专用字段
 
 - `Y`：本文最终解释、调节或实现的结果、现象或能力
 - `A`：当前最接近的公认解释、控制因素或设计策略
@@ -152,6 +187,33 @@ version: 5.0.0
 - `G`：新增的解释、预测、调控或实施能力
 - 必须保留的引文组及其实际支撑命题
 - 是否需要新增文献检索
+
+### 3.6 路由决策与覆盖声明
+
+路由优先级固定为：显式 `section_mode` → 旧字段“文本所属部分” → 明确任务词 → 根据实际文本边界推断。`operation` 同样优先采用显式值。用户声明的上下文只记为 `requested_context_level`；实际 `context_level` 必须由所给章节和 ledger 计算。显式字段互相冲突、文本与声明部分明显不符或无法唯一判定时，不静默选择；输出冲突及安全可执行范围。
+
+除“仅精修稿”外，输出开头给出：
+
+```text
+route_decision:
+  section_mode:
+  requested_operation:
+  operation:
+  paired_modes:
+  journal_overlay: off | on
+  output_detail: text_only | with_notes | mode_full | diagnostic
+  requested_context_level:
+  context_level:
+  required_inputs:
+  loaded_refs:
+  skipped_checks:
+  coverage:
+  not_checked:
+  status: ok | partial | fallback | author_confirmation_required | blocked
+  blockers:
+```
+
+`coverage` 只描述实际检查范围。`local` 表示只处理目标文本；`partial` 表示使用了部分跨章节上下文；`full` 仅在完成全文契约要求的章节与证据检查后使用。用户选择“仅精修稿”时仍需在内部执行路由和安全门，但不附加诊断元数据；若安全门阻断科学重构，安全门优先于输出格式。
 
 ## 4. 不可更改的优先级
 
@@ -219,6 +281,8 @@ version: 5.0.0
 - Introduction 草稿没有提供能够确定全文最高层贡献的信息。
 
 ## 6. 主张—证据等级
+
+本节是便于执行的摘要；等级定义、最低证据和动词上限的唯一规范为 `references/CLAIM_EVIDENCE_MATRIX.md`。若表述有差异，以该文件为准。
 
 加载 `references/CLAIM_EVIDENCE_MATRIX.md`。所有句子先归入以下等级，再选择动词。
 
@@ -291,6 +355,8 @@ higher、lower、enhanced、reduced、superior、comparable 等词应明确：
 
 ## 8. 论文类型路由
 
+本节只保留快速识别摘要。十类论文与混合类型的唯一完整路由规范为 `references/PAPER_TYPE_ROUTING.md`；单 section 上下文不足时返回 `indeterminate/insufficient-context`，不硬判类型。
+
 加载 `references/PAPER_TYPE_ROUTING.md`。按核心科学问题选择主类型，按证据功能选择次要模块。
 
 | 代码 | 主类型 | 典型主线 |
@@ -315,6 +381,8 @@ higher、lower、enhanced、reduced、superior、comparable 等词应明确：
 5. 机理论文中的性能结果用于说明后果，不能取代过程问题。
 
 ## 9. Results 与 Discussion 的第一性原理分工
+
+本节是共同原则摘要。实际处理分别服从 `references/RESULTS_MODE.md`、`references/DISCUSSION_MODE.md` 和共享的 `references/RESULTS_DISCUSSION_LOGIC.md`。
 
 加载 `references/RESULTS_DISCUSSION_LOGIC.md`。
 
@@ -442,6 +510,8 @@ Discussion 将局部结论连接为完整解释：
 
 ## 12. 论文部分规则
 
+下列内容是兼容性摘要。Abstract、Introduction、Results、Discussion、Conclusion 和全文的输入、输出、覆盖与失败闭合以对应 mode 文件为准；摘要不得覆盖 mode 的上下文限制。
+
 ### 12.1 题目
 
 题目应准确反映：
@@ -471,7 +541,7 @@ Discussion 将局部结论连接为完整解释：
 
 处理 Introduction 时加载 `references/INTRODUCTION_LOGIC.md`。
 
-先从题目、摘要、Results、Discussion 和 Conclusion 提取最高层贡献，再填写：
+优先从实际提供的题目、摘要、Results、Discussion 和 Conclusion 提取最高层贡献；只有 Introduction 草稿时，只从草稿中保守提取并把其余来源列入 `not_checked`，不得假设这些章节存在。随后填写：
 
 ```text
 Y：最终解释、调节或实现的结果
@@ -617,7 +687,7 @@ Introduction 的主路由为：
 
 ### 14.1 期刊家族路由
 
-用户指定目标期刊时，加载 `references/JOURNAL_ADAPTATION.md`，按家族适配体裁：
+`target_journal` 与 `adaptation_permission=true` 同时提供时，加载 `references/JOURNAL_ADAPTATION.md`，按家族适配体裁：
 
 | 家族 | 代表期刊 | 体裁要点 |
 |---|---|---|
@@ -666,14 +736,14 @@ Introduction 的主路由为：
 - 调整段内句序；
 - 合并重复信息；
 - 明确比较条件和证据强度；
-- 输出简要主线和 Results–Discussion 诊断；
+- 只输出当前 section 可支持的简要主线；仅在提供 Results/Discussion 或选择配对模式时输出相应诊断；
 - 默认不跨段移动。
 
 ### 16.3 深度学术重写
 
 - 依据原文科学含义重建句子和段内论证；
 - 在用户许可范围内重排原文已有环节；
-- 使摘要、引言、结果、讨论和结论采用同一主张顺序；
+- 在 `partial/full` 上下文中核对已提供章节的主张顺序；local 输入不声称完成跨章节统一；
 - 区分性能证明与机制证明；
 - 区分局部因果与完整机制；
 - 保留全部可验证信息；
@@ -683,30 +753,21 @@ Introduction 的主路由为：
 
 输出前在内部完成：
 
-1. 判断文本部分及其功能；
-2. 判定主论文类型和次要模块；
-3. 提取一句核心科学问题；
-4. 提取作者希望建立的主要主张；
-5. 处理 Introduction 时，从题目、摘要、Results、Discussion 和 Conclusion 提取最高层贡献并判定发现导向或需求与性能导向；
-6. 处理 Introduction 时，填写 `Y、A、C、B、X、M、E、G`，检查缺口与贡献是否同级；
-7. 将主张拆成 3–7 个环节；
-8. 为每个环节标注 L0–L7 证据等级；
-9. 将每个主张对应到原文数据、图表、计算、引文或直接观察；
-10. 锁定数值、单位、条件、符号、图表和引文；
-11. 处理 Introduction 时，按重要性、共识、最近前沿和精确缺口审计文献，并核对引文支撑范围；
-12. 判断每句话属于 Results 事实、局部推断，或 Discussion 综合解释；
-13. 检查初始状态、比较基准、时间顺序和中间变量；
-14. 对性能论文分开建立各性能来源及权衡缓解路径；
-15. 对混合论文确定唯一主线；
-16. 检查每段主要问题和每句中心命题；
-17. 检查图序是否形成证明序列；
-18. 处理 Introduction 时，将方法逐一对应到缺失可观测量，并核对引言末段与首图及正文证据顺序；
-19. 在权限范围内重组；
-20. 校准因果、程度和推广措辞；
-21. 指定目标期刊时执行体裁适配（长度、摘要体裁、受众层次、压缩清单）；
-22. 生成投稿材料时逐条比对正文主张与证据等级，并核对字符/词数限制；
-23. 对照原文逐项确认无新增、无删除、无漂移；
-24. 将不能判断的问题列入作者确认项。
+1. 规范化显式字段、旧字段和自然语言指令，确定唯一 `section_mode + operation`；
+2. 盘点实际收到的章节和证据，计算 `context_level`，列出 `required_inputs`、`coverage` 与 `not_checked`；
+3. 加载共享科学底座、一个主模式文件和真正触发的叠加模块；不运行无关 section 的完整检查；
+4. 锁定数值、单位、条件、术语、符号、图表、公式和引文支撑范围；
+5. 按 `references/CLAIM_EVIDENCE_MATRIX.md` 确定每项主张的最高证据等级和允许动词；
+6. 在 `consistency`、全文模式或跨章节重构中建立 ClaimRecord、EvidenceRecord 和章节归属；局部语言精修不伪造全文 ledger；
+7. 仅按当前主模式执行改写或诊断：Abstract 压缩，Introduction 建立必要性，Results 报告证据，Discussion 闭合解释，Conclusion 回收已建立主张，Full text 管理跨章节一致性；
+8. 需要时判定论文类型、性能路线和领域安全门；信息不足时返回 `unknown/insufficient-context`，不按标题关键词硬判；
+9. 在 `reorder_scope` 和用户权限内重组；跨章节移动、Results ↔ Discussion 重分配和移入补充材料均需显式授权；
+10. 执行上下文充足性、证据强度、无新增主张、章节角色、条件/术语一致性和权限门；
+11. 缺少必要上下文时降级为可安全完成的 `polish` 或 `diagnose`；无法安全生成时设为 `blocked`，不以“仅精修稿”绕过安全门；
+12. 仅在用户明确指定期刊时执行体裁适配；生成投稿材料时逐条回溯正文主张；
+13. 对照输入确认无新增、无删除独立证据、无条件或强度漂移；
+14. 生成 `status`、`blockers`、作者确认项和所有未执行检查；
+15. 按当前 section 的输出契约渲染结果。
 
 不得输出内部逐步推理。可输出结构化诊断、证据映射和修改理由。
 
@@ -731,44 +792,31 @@ Introduction 的主路由为：
 - 修改后的处理：
 - 修改原因：
 
-### 18.3 完整模式
+### 18.3 模式完整输出
 
-#### 一、精修稿
+旧“完整模式”映射到当前 section 的模式完整输出，不再默认追加全文叙事和 Results–Discussion 诊断。固定顺序为：
 
-#### 二、关键修改说明
+1. `route_decision`：`section_mode / requested_operation / operation / paired_modes / journal_overlay / output_detail / requested_context_level / context_level / required_inputs / loaded_refs / skipped_checks / coverage / not_checked / status / blockers`；
+2. 当前模式允许生成的精修稿、重构稿或诊断；
+3. 关键修改说明；
+4. 当前 section 的主张—证据或功能映射；
+5. 需作者确认的问题；
+6. 明确未执行的检查。
 
-#### 三、需作者确认的问题
+各模式追加内容：
 
-每项说明：
+- Abstract：路由理由、核心主张、句子功能、新信息与动词边界，见 `references/ABSTRACT_MODE.md`；
+- Introduction：`Y/A/C/B/X/M/E/G`、精确缺口、段落功能和引文边界，见 `references/INTRODUCTION_MODE.md`；
+- Results：ClaimRecord—EvidenceRecord 映射、基准/条件缺口和需移入 Discussion 的句子，见 `references/RESULTS_MODE.md`；
+- Discussion：核心结果选择、机制箭头、替代解释、边界和应前移 Results 的事实，见 `references/DISCUSSION_MODE.md`；
+- Conclusion：已建立主张的回收顺序、新增/遗漏/强化/冲突审计，见 `references/CONCLUSION_MODE.md`；
+- Full text：全局 claim ledger、章节归属、覆盖顺序、重复、图表/引文和跨章节一致性，见 `references/FULL_TEXT_MODE.md`。
 
-- 涉及原文；
-- 当前可确定的信息；
-- 缺失的数据、条件、定义或证据环节；
-- 该缺口影响的结论。
-
-无问题时写“无”。
-
-#### 四、科学叙事诊断
-
-- 判定的主类型与次要模块；
-- 一句话核心问题；
-- 原文已有主线；
-- 埋没、倒置、仅并列、缺失或证据不足的环节；
-- 本次重排内容和明确未做事项；
-- 贯穿全文的原文指标；
-- 题目—摘要—引言—结果—讨论—结论的一致性。
-
-#### 五、Results–Discussion 诊断
-
-- 应保留在 Results 的直接证据和局部判断；
-- 应进入 Discussion 的跨证据解释；
-- 当前重复内容；
-- 当前机制越界；
-- 建议的段落或小节顺序。
+作者确认项逐项说明涉及原文、当前可确定信息、缺失条件或证据以及受影响结论。无问题时写“无”。
 
 ### 18.4 架构审阅模式
 
-不生成精修稿，输出：
+映射为当前 section 的 `diagnose`；不生成精修稿。只有 `section_mode=full` 且上下文满足全文契约时才输出全文级内容：
 
 1. 核心问题与论文类型；
 2. 主张—证据矩阵；
@@ -779,7 +827,7 @@ Introduction 的主路由为：
 
 ### 18.5 Introduction 专用模式
 
-任务类型为 Introduction 重构时，根据用户选择输出：
+这是 `section_mode=introduction` 的兼容输出别名。任务类型为 Introduction 重构时，根据用户选择输出：
 
 1. 重构后的 Introduction；
 2. 一句话核心新认识及最高证据等级；
@@ -807,32 +855,37 @@ Introduction 的主路由为：
 用户未指定时：
 
 - 目标语言：英文；
-- 文本部分：依据内容判断；
+- `section_mode`：依据显式部分名和实际文本边界判断；无法唯一判定时只做安全范围内的局部处理；
+- `operation`：依据明确动词判断；“润色/精修”为 `polish`，“改写”为 `rewrite`，“重构/重排”为 `restructure`，“检查/审计”为 `diagnose` 或 `consistency`；
+- `requested_context_level`：按用户请求记录，未指定时为自动；`context_level` 按实际提供材料计算，单一部分默认为 `local`，不得因用户声明或选择完整输出而升为 `full`；
 - 论文类型：自动判定；
 - 摘要精修模式：自动；
 - Introduction 模式：自动；
 - 中文转英文：深度学术重写；
 - 已有英文：中度逻辑与语言优化；
-- 架构干预：单段仅诊断，完整章节或全文在原文证据链内重排；
+- 架构干预：单段可在当前段/section 内按请求处理；全文默认仅诊断；
 - Results–Discussion：保持现有归属并给出诊断；
 - 证据审计：简要；
-- 输出模式：完整模式；
+- 输出模式：模式完整输出；
 - Introduction 重构请求的默认输出：Introduction 完整模式；
+- `reorder_scope`：`paragraph`；
 - 允许段内重排：是；
 - 允许跨段重排：否；
 - 允许跨小节移动：否；
 - 拼写体系：保持原文，无法判断时采用美式英语（目标期刊为 Nature 主刊时采用英式）；
-- 目标期刊：未指定时不启用期刊适配，默认按 Elsevier 全长文体裁输出；
+- 目标期刊：未指定时 `journal_overlay=off`，不隐式采用 Elsevier 或其他期刊体裁；
 - 长度：接近原文，不为文风扩写；
 - 引文：尽量随支撑命题保留，范围不清时不移动；
 - 新增文献检索：默认关闭。
 
-用户明确要求“逻辑重组、全文主线、Results–Discussion 重写、摘要重构、Introduction 重构、期刊适配、投稿材料”时，启用对应模块，不额外询问可由原文判断的字段。跨小节移动仍需明确许可。
+用户明确要求“逻辑重组、全文主线、摘要重构、Introduction 重构、Results 重构、Discussion 重构、Conclusion 重构、一致性审计、投稿材料”时，启用对应模块，不额外询问可由原文判断的字段。Results–Discussion 分工默认只诊断，重新分配需明确权限。期刊适配只有在目标期刊和适配授权同时明确时才启用；否则 `journal_overlay=off` 并返回缺失条件。上下文不足时自行执行安全降级并说明；跨小节或跨章节移动仍需明确许可。
 
 ## 20. 最终核查
 
 提交前确认：
 
+- 已输出或内部记录唯一的 `section_mode + operation + context_level`，且 `coverage` 与实际材料一致；
+- 只运行当前模式及显式叠加模块，未把局部输入包装成全文审计；
 - 所有科学事实、数值、条件、符号、图表和引文保持一致；
 - 没有新增实验事实、机制、文献、统计显著性或应用结论；
 - 每个因果动词具有相应证据等级；
@@ -843,8 +896,8 @@ Introduction 的主路由为：
 - 同步辐射、氢脆、疲劳和计算结论通过领域安全门；
 - 每个比较具有对象、参数、基准和条件；
 - 每句有清楚主干，每段回答一个问题；
-- 题目、摘要、引言末段、结果、讨论和结论的主张集合一致；
-- 图序可以复述论文的证明顺序；
+- 启用跨章节检查时，题目、摘要、引言末段、结果、讨论和结论的主张集合、条件、顺序和强度一致；
+- 启用全文/图序检查时，图序可以复述论文的证明顺序；
 - 处理 Introduction 时，一句话贡献能够写成 `C 下的 X → M → Y`，精确缺口与贡献同级；
 - 处理 Introduction 时，已有研究回答到哪里、停在哪里及方法边界均得到说明；
 - 处理 Introduction 时，每种主要方法对应一个缺失可观测量，引言末段与首图和正文证据顺序一致；
@@ -852,6 +905,7 @@ Introduction 的主路由为：
 - 启用期刊适配时，长度、摘要体裁和受众层次符合目标家族，且科学内容未因体裁改变；
 - 投稿材料的每个主张可在正文定位、等级不升，且字符/词数已核对；
 - 不确定问题已经进入作者确认项；
+- 所有未执行检查已列入 `not_checked`，阻断项未被“仅精修稿”隐藏；
 - 没有复制任何范文的可识别词句、固定结构或特定机制表述。
 
 同时应用 `references/QUALITY_CHECKLIST.md`。

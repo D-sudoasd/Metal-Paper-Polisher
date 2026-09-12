@@ -1,8 +1,34 @@
 # Changelog
 
-## Unreleased — 摘要双路由与 Introduction 专用重构
+## Unreleased — 六种 section mode 与证据闭合
 
-本阶段在摘要发现/设计双路由之上新增 Introduction 专用逻辑分支。Introduction 不再只执行语言润色或通用“背景—缺口—本文工作”套式，而是先从全文最高层贡献反向确定精确缺口，再围绕核心新认识、证据路线和适用边界重构完整论证。
+本阶段把原有摘要与 Introduction 专用能力扩展为统一的六种 section mode。请求先规范化为 `section_mode + operation + context_level`，再只加载目标部分的契约；局部输入必须声明覆盖范围，关键上下文缺失时安全降级或阻断，不能把单段润色包装成全文一致性审计。
+
+### 六种 section mode
+
+1. **统一路由**
+   - `section_mode`：abstract / introduction / results / discussion / conclusion / full；
+   - `operation`：polish / rewrite / diagnose / restructure / consistency；
+   - `context_level`：local / partial / full；
+   - 旧字段“文本所属部分”“任务类型”“完整模式”继续兼容。
+
+2. **专用 section 契约**
+   - Abstract 与 Introduction 通过薄 wrapper 复用现有深层规则；
+   - Results 只输出证据邻近事实、定量关系和局部判断；
+   - Discussion 只有在 Results/EvidenceRecord 可用时才允许机制性重写；
+   - Conclusion 只回收正文已建立主张；
+   - Full text 建立 claim/evidence ledger、canonical owner 和章节覆盖关系。
+
+3. **覆盖与失败闭合**
+   - 模式完整输出统一报告 `coverage / not_checked / status / blockers`；
+   - 状态为 `ok / partial / fallback / author_confirmation_required / blocked`；
+   - 缺少证据、条件、核心章节或移动权限时不静默补写；
+   - 未指定期刊时 `journal_overlay=off`，不隐式采用 Elsevier 体裁。
+
+4. **可验证契约**
+   - `SECTION_MODE_MANIFEST.json` 集中声明六种模式的别名、输入、加载、输出和安全门；
+   - `scripts/validate-skill.mjs` 验证六种模式完整性、文件/引用、别名冲突和固定输出字段；
+   - `tests/section-mode-fixtures.json` 覆盖中英文、旧字段、五种 operation、由实际章节与 ledger 计算的 coverage、配对模块加载和期刊授权正反路径；这些契约测试不替代真实论文的科学语义审计。
 
 ### Introduction 专用重构
 
@@ -114,6 +140,15 @@
 
 ### 新增文件
 
+- `references/SECTION_MODE_ROUTER.md`
+- `references/SECTION_MODE_MANIFEST.json`
+- `references/ABSTRACT_MODE.md`
+- `references/INTRODUCTION_MODE.md`
+- `references/RESULTS_MODE.md`
+- `references/DISCUSSION_MODE.md`
+- `references/CONCLUSION_MODE.md`
+- `references/FULL_TEXT_MODE.md`
+- `tests/section-mode-fixtures.json`
 - `references/INTRODUCTION_LOGIC.md`
 - `references/PROMPT_INTRODUCTION_RECONSTRUCTION.md`
 - `references/ABSTRACT_DESIGN_SOLUTION_MODE.md`

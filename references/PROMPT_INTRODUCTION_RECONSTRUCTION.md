@@ -9,7 +9,13 @@
 ## 输入
 
 - 目标语言：[英文 / 中文]
-- 目标期刊：[无 / 填写]
+- section_mode：introduction
+- operation：[polish / rewrite / diagnose / restructure / consistency]
+- requested_context_level：[local / partial / full / 自动]
+- context_level：[由实际材料自动计算，不手填]
+- 已提供章节及完整性：[Introduction / 题目 / 摘要 / Results / Discussion / Conclusion / ledger]
+- `target_journal`：[无 / 填写]
+- `adaptation_permission`：[否 / 是；只有与 target_journal 同时提供时才可开启]
 - 目标长度：[接近原文 / 填写词数]
 - Introduction 模式：[自动 / 发现导向 / 需求与性能导向]
 - 润色强度：[轻度 / 中度 / 深度]
@@ -19,6 +25,8 @@
 - 允许删除重复背景：[是 / 否]
 - 是否需要新增文献检索：[否 / 是]
 - 输出模式：[仅精修引言 / 精修引言与关键说明 / Introduction 完整模式 / 架构诊断模式]
+
+“Introduction 完整模式”只控制输出详细度，不表示 `context_level=full`。只有引言草稿时按 `coverage=local` 执行，不能声称引言承诺已由全文闭合。未明确目标期刊时不启用期刊体裁。缺少最高层贡献或必要证据时，安全门优先于“仅精修引言”，只交付可确定的语言层修订或诊断。
 
 ### 核心科学信息
 
@@ -259,6 +267,8 @@ The analysis identifies which factor governs the tuning trend, which factor enha
 - `provide a route`：实施条件和适用边界明确。
 
 ## 输出
+
+除“仅精修引言”外，先给出统一 `route_decision`（含 `section_mode / requested_operation / operation / paired_modes / journal_overlay / output_detail / requested_context_level / context_level / required_inputs / loaded_refs / skipped_checks / coverage / not_checked / status / blockers`）。只有引言文本时必须列出未完成的全文承诺和引文真实性检查；“仅精修引言”也必须在内部执行同一安全门。
 
 ### 仅精修引言
 

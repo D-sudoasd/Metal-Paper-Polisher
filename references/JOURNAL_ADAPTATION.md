@@ -17,7 +17,7 @@
 | R（长综述） | Progress in Materials Science、Materials Science & Engineering R、International Materials Reviews | 分类框架 + 判据 + 证据冲突 + 路线图 |
 | G（通用/学会期刊） | Metall. Mater. Trans. A、J. Alloys Compd.、Mater. Charact.、Acta Metall. Sin. (Engl. Lett.) | 常规 IMRAD；摘要 150–250 词；以 E-F 规则为默认 |
 
-未指定期刊时不启用本文件；默认输出体裁为 E-F 家族的全长文体裁。
+未指定目标期刊或未明确要求适配时不启用本文件，也不默认采用 E-F 或任何其他家族体裁。此时只保持原文已存在的体裁与长度边界；需要改变体裁时必须先得到目标期刊和适配授权。
 
 ## 2. 家族 N：Nature 系
 

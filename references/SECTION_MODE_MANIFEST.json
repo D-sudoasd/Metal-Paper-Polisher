@@ -1,0 +1,267 @@
+{
+  "manifest_version": "1.0.0",
+  "purpose": "Machine-readable routing metadata for section-aware academic editing.",
+  "dimensions": {
+    "section_mode": ["abstract", "introduction", "results", "discussion", "conclusion", "full"],
+    "operation": ["polish", "rewrite", "diagnose", "restructure", "consistency"],
+    "context_level": ["local", "partial", "full"],
+    "status": ["ok", "partial", "fallback", "author_confirmation_required", "blocked"]
+  },
+  "route_decision_fields": [
+    "section_mode",
+    "requested_operation",
+    "operation",
+    "context_level",
+    "requested_context_level",
+    "required_inputs",
+    "loaded_refs",
+    "skipped_checks",
+    "coverage",
+    "not_checked",
+    "status",
+    "blockers",
+    "paired_modes",
+    "journal_overlay",
+    "output_detail"
+  ],
+  "context_policy": {
+    "declared_value_is_request_only": true,
+    "levels": {
+      "local": ["target_text"],
+      "partial": ["target_text", "at_least_one_direct_dependency_or_auditable_ledger"],
+      "full": ["complete_section_manifest", "all_required_core_sections", "claim_records_or_extractable_source", "evidence_records_or_extractable_source"]
+    },
+    "full_core_sections": ["title", "abstract", "introduction", "methods", "results", "discussion_or_results_and_discussion", "conclusion"],
+    "on_overclaim": "downgrade_and_report_blocker"
+  },
+  "output_detail": {
+    "default": "mode_full",
+    "allowed_values": ["text_only", "with_notes", "mode_full", "diagnostic"],
+    "aliases": {
+      "仅精修稿": "text_only",
+      "仅精修摘要": "text_only",
+      "仅精修引言": "text_only",
+      "精修稿与关键说明": "with_notes",
+      "精修稿与说明": "with_notes",
+      "精修引言与关键说明": "with_notes",
+      "完整模式": "mode_full",
+      "模式完整输出": "mode_full",
+      "Introduction 完整模式": "mode_full",
+      "架构审阅模式": "diagnostic",
+      "Introduction 架构诊断模式": "diagnostic"
+    },
+    "affects": "rendering_only"
+  },
+  "legacy_fields": {
+    "文本所属部分": "section_mode",
+    "text_section": "section_mode",
+    "任务类型": "operation",
+    "task_type": "operation",
+    "上下文级别": "requested_context_level",
+    "上下文覆盖": "requested_context_level",
+    "context_scope": "requested_context_level",
+    "输出模式": "output_detail",
+    "output_mode": "output_detail"
+  },
+  "aliases": {
+    "section_mode": {
+      "摘要": "abstract",
+      "abstract section": "abstract",
+      "abstract-only": "abstract",
+      "引言": "introduction",
+      "介绍": "introduction",
+      "introduction section": "introduction",
+      "Introduction 重构": "introduction",
+      "结果": "results",
+      "results section": "results",
+      "讨论": "discussion",
+      "discussion section": "discussion",
+      "结论": "conclusion",
+      "conclusion section": "conclusion",
+      "全文": "full",
+      "full text": "full",
+      "whole paper": "full",
+      "全文架构审阅": "full",
+      "Results–Discussion": "results",
+      "Results and Discussion": "results"
+    },
+    "operation": {
+      "润色": "polish",
+      "语言精修": "polish",
+      "language polishing": "polish",
+      "rewrite": "rewrite",
+      "重写": "rewrite",
+      "摘要重构": "restructure",
+      "Introduction 重构": "restructure",
+      "Results 重构": "restructure",
+      "Discussion 重构": "restructure",
+      "Conclusion 重构": "restructure",
+      "全文重构": "restructure",
+      "restructure": "restructure",
+      "结构重排": "restructure",
+      "架构重构": "restructure",
+      "Results–Discussion 分工": "diagnose",
+      "Results–Discussion split": "diagnose",
+      "diagnosis": "diagnose",
+      "诊断": "diagnose",
+      "图序诊断": "diagnose",
+      "证据审计": "diagnose",
+      "期刊格式适配": "diagnose",
+      "journal adaptation": "diagnose",
+      "consistency": "consistency",
+      "一致性检查": "consistency",
+      "全文架构审阅": "diagnose"
+    },
+    "context_level": {
+      "local": "local",
+      "局部": "local",
+      "单节": "local",
+      "当前部分": "local",
+      "local section": "local",
+      "partial": "partial",
+      "部分上下文": "partial",
+      "部分全文": "partial",
+      "selected sections": "partial",
+      "full": "full",
+      "全文上下文": "full",
+      "完整上下文": "full",
+      "full context": "full"
+    }
+  },
+  "task_aliases": {
+    "语言精修": {"operation": "polish"},
+    "language polishing": {"operation": "polish"},
+    "摘要重构": {"section_mode": "abstract", "operation": "restructure"},
+    "abstract reconstruction": {"section_mode": "abstract", "operation": "restructure"},
+    "Introduction 重构": {"section_mode": "introduction", "operation": "restructure"},
+    "Introduction reconstruction": {"section_mode": "introduction", "operation": "restructure"},
+    "Results 重构": {"section_mode": "results", "operation": "restructure"},
+    "results reconstruction": {"section_mode": "results", "operation": "restructure"},
+    "Discussion 重构": {"section_mode": "discussion", "operation": "restructure"},
+    "discussion reconstruction": {"section_mode": "discussion", "operation": "restructure"},
+    "Conclusion 重构": {"section_mode": "conclusion", "operation": "restructure"},
+    "conclusion reconstruction": {"section_mode": "conclusion", "operation": "restructure"},
+    "Conclusion 一致性审计": {"section_mode": "conclusion", "operation": "consistency"},
+    "conclusion consistency audit": {"section_mode": "conclusion", "operation": "consistency"},
+    "全文重构": {"section_mode": "full", "operation": "restructure"},
+    "full-text reconstruction": {"section_mode": "full", "operation": "restructure"},
+    "全文一致性审计": {"section_mode": "full", "operation": "consistency"},
+    "full-text consistency audit": {"section_mode": "full", "operation": "consistency"},
+    "Results–Discussion 分工": {"section_mode": "results", "operation": "diagnose", "paired_modes": ["results", "discussion"]},
+    "Results–Discussion split": {"section_mode": "results", "operation": "diagnose", "paired_modes": ["results", "discussion"]},
+    "全文架构审阅": {"section_mode": "full", "operation": "diagnose"},
+    "full-text architecture review": {"section_mode": "full", "operation": "diagnose"},
+    "图序诊断": {"section_mode": "full", "operation": "diagnose"},
+    "figure-order diagnosis": {"section_mode": "full", "operation": "diagnose"},
+    "证据审计": {"section_mode": "full", "operation": "diagnose"},
+    "evidence audit": {"section_mode": "full", "operation": "diagnose"},
+    "期刊格式适配": {"section_mode": "full", "operation": "diagnose", "journal_overlay": "on"},
+    "journal adaptation": {"section_mode": "full", "operation": "diagnose", "journal_overlay": "on"},
+    "投稿材料": {"section_mode": "full", "operation": "rewrite"},
+    "submission materials": {"section_mode": "full", "operation": "rewrite"},
+    "审稿回复": {"section_mode": "full", "operation": "rewrite"},
+    "review response": {"section_mode": "full", "operation": "rewrite"}
+  },
+  "paired_section_aliases": {
+    "Results–Discussion": ["results", "discussion"],
+    "Results and Discussion": ["results", "discussion"],
+    "结果与讨论": ["results", "discussion"]
+  },
+  "journal_overlay": {
+    "default": "off",
+    "allowed_values": ["off", "on"],
+    "requires": ["target_journal", "adaptation_permission"],
+    "enable_when": "Only when a target journal and permission to adapt are explicitly supplied.",
+    "implicit_elsevier": false
+  },
+  "shared_refs": [
+    "references/SECTION_MODE_ROUTER.md",
+    "references/CLAIM_EVIDENCE_MATRIX.md",
+    "references/INPUT_TEMPLATE.md",
+    "references/PAPER_TYPE_ROUTING.md",
+    "references/QUALITY_CHECKLIST.md"
+  ],
+  "modes": {
+    "abstract": {
+      "file": "references/ABSTRACT_MODE.md",
+      "required_inputs": ["text"],
+      "conditional_inputs": ["abstract_mode", "title", "claim_records", "evidence_records", "results", "discussion", "conclusion", "target_journal", "adaptation_permission"],
+      "load": ["references/ABSTRACT_MODELS.md"],
+      "conditional_load": {
+        "abstract_mode=discovery": ["references/ABSTRACT_CORE_CLAIM_MODE.md", "references/PROMPT_ABSTRACT_CORE_CLAIM.md"],
+        "abstract_mode=design": ["references/ABSTRACT_DESIGN_SOLUTION_MODE.md", "references/PROMPT_ABSTRACT_DESIGN_SOLUTION.md"],
+        "journal_overlay=on": ["references/JOURNAL_ADAPTATION.md"]
+      },
+      "outputs": ["route_decision", "revision", "core_claim", "abstract_audit", "questions"],
+      "gates": ["context_sufficiency", "core_claim_identity", "evidence_strength_monotonicity", "condition_term_lock", "no_new_claims", "section_role_boundary", "citation_permission"]
+    },
+    "introduction": {
+      "file": "references/INTRODUCTION_MODE.md",
+      "required_inputs": ["text"],
+      "conditional_inputs": ["introduction_mode", "Y", "A", "C", "B", "X", "M", "E", "G", "title", "abstract", "results", "discussion", "conclusion", "citation_manifest", "target_journal", "adaptation_permission"],
+      "load": ["references/INTRODUCTION_LOGIC.md"],
+      "conditional_load": {
+        "reverse_generation=true": ["references/PROMPT_INTRODUCTION_RECONSTRUCTION.md"],
+        "journal_overlay=on": ["references/JOURNAL_ADAPTATION.md"]
+      },
+      "outputs": ["route_decision", "revision", "variable_map", "gap_statement", "paragraph_map", "promise_audit", "questions"],
+      "gates": ["context_sufficiency", "gap_precision", "core_claim_identity", "evidence_strength_monotonicity", "promise_evidence_closure", "citation_permission", "condition_term_lock", "no_new_claims", "section_role_boundary"]
+    },
+    "results": {
+      "file": "references/RESULTS_MODE.md",
+      "required_inputs": ["text"],
+      "conditional_inputs": ["figure_table_map", "conditions", "baselines", "claim_records", "evidence_records", "introduction", "abstract", "target_journal", "adaptation_permission"],
+      "load": ["references/RESULTS_DISCUSSION_LOGIC.md", "references/CLAIM_EVIDENCE_MATRIX.md"],
+      "conditional_load": {
+        "context_level=full": ["references/ARCHITECTURE_RULES.md"],
+        "operation=consistency": ["references/ARCHITECTURE_RULES.md"],
+        "paired_modes=[results, discussion]": ["references/DISCUSSION_MODE.md"],
+        "journal_overlay=on": ["references/JOURNAL_ADAPTATION.md"]
+      },
+      "outputs": ["route_decision", "revision", "claim_evidence_map", "local_causality_audit", "missing_context", "questions"],
+      "gates": ["context_sufficiency", "core_claim_identity", "evidence_proximity", "evidence_strength_monotonicity", "condition_term_lock", "local_causality", "no_new_claims", "section_role_boundary", "figure_table_mapping"]
+    },
+    "discussion": {
+      "file": "references/DISCUSSION_MODE.md",
+      "required_inputs": ["text"],
+      "conditional_inputs": ["results", "figure_table_map", "claim_records", "evidence_records", "alternatives", "limitations", "introduction", "abstract", "target_journal", "adaptation_permission"],
+      "load": ["references/RESULTS_DISCUSSION_LOGIC.md", "references/CLAIM_EVIDENCE_MATRIX.md"],
+      "conditional_load": {
+        "context_level=partial": ["references/ARCHITECTURE_RULES.md"],
+        "context_level=full": ["references/ARCHITECTURE_RULES.md"],
+        "operation=rewrite": ["references/ARCHITECTURE_RULES.md"],
+        "operation=consistency": ["references/ARCHITECTURE_RULES.md"],
+        "paired_modes=[results, discussion]": ["references/RESULTS_MODE.md"],
+        "journal_overlay=on": ["references/JOURNAL_ADAPTATION.md"]
+      },
+      "outputs": ["route_decision", "revision", "evidence_arrow_ledger", "alternative_audit", "boundary_audit", "missing_context", "questions"],
+      "gates": ["context_sufficiency", "core_claim_identity", "evidence_arrow_closure", "alternative_explanations", "boundary_statement", "evidence_strength_monotonicity", "condition_term_lock", "no_new_claims", "section_role_boundary"]
+    },
+    "conclusion": {
+      "file": "references/CONCLUSION_MODE.md",
+      "required_inputs": ["text"],
+      "conditional_inputs": ["abstract", "introduction", "results", "discussion", "claim_records", "evidence_records", "scope", "limitations", "target_journal", "adaptation_permission"],
+      "load": ["references/CLAIM_EVIDENCE_MATRIX.md"],
+      "conditional_load": {
+        "context_level=full": ["references/ARCHITECTURE_RULES.md"],
+        "operation=consistency": ["references/QUALITY_CHECKLIST.md"],
+        "journal_overlay=on": ["references/JOURNAL_ADAPTATION.md"]
+      },
+      "outputs": ["route_decision", "revision", "recovery_order", "coverage_audit", "new_claim_audit", "scope_audit", "questions"],
+      "gates": ["context_sufficiency", "core_claim_identity", "established_claim_recovery", "claim_order", "evidence_strength_monotonicity", "no_new_claims", "scope_boundary", "condition_term_lock", "section_role_boundary"]
+    },
+    "full": {
+      "file": "references/FULL_TEXT_MODE.md",
+      "required_inputs": ["section_manifest"],
+      "conditional_inputs": ["title", "abstract", "introduction", "methods", "results", "discussion", "conclusion", "figure_table_map", "claim_records", "evidence_records", "citation_manifest", "journal", "target_journal", "adaptation_permission"],
+      "load": ["references/SECTION_MODE_ROUTER.md", "references/ARCHITECTURE_RULES.md", "references/CLAIM_EVIDENCE_MATRIX.md"],
+      "conditional_load": {
+        "journal_overlay=on": ["references/JOURNAL_ADAPTATION.md"],
+        "paper_type=performance": ["references/PERFORMANCE_PAPER_LOGIC.md"],
+        "domain_overlay=on": ["references/DOMAIN_EVIDENCE_MODULES.md"]
+      },
+      "outputs": ["route_decision", "main_line", "claim_evidence_ledger", "ownership_map", "ordering_audit", "cross_section_consistency", "section_revisions", "questions"],
+      "gates": ["context_sufficiency", "core_claim_identity", "claim_coverage_order", "canonical_owner", "evidence_arrow_closure", "evidence_strength_monotonicity", "condition_term_lock", "title_abstract_conclusion_alignment", "no_new_claims", "section_role_boundary", "citation_permission"]
+    }
+  }
+}
